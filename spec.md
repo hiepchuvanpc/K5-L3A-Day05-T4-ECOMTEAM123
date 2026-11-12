@@ -26,7 +26,26 @@ Trong **Trò chuyện với Shopee**, khi **người mua** đang báo "hàng nh�
 - ≥8 kịch bản, mỗi lớp ①②③④ ít nhất một; mỗi kịch bản: tin người dùng · lớp · AI có thể sai thế nào · sản phẩm tốt nên làm gì · nhãn (nhẹ / sửa được / không chấp nhận được).
 - Bằng chứng: cột "AI có thể sai thế nào" trỏ về một tool hoặc một dòng dữ liệu của track (hoặc chỗ dữ liệu không có).
 - Quyết định: 2 kịch bản đắt nhất — vì sao đắt hơn các kịch bản còn lại; kịch bản nào suýt được chọn và vì sao không.
+## §2. Kịch bản rủi ro
+10 kịch bản, phủ ①②③④; hai kịch bản đắt nhất được khoanh ở dưới.
 
+| Tin người dùng | Lớp | AI có thể sai thế nào | Sản phẩm tốt nên làm gì | Nhãn |
+|---|---|---|---|---|
+| “Mình đặt áo size L mà nhận size M, mặc không vừa. Shop nhắn nhận là gửi nhầm rồi. Mình muốn trả hàng hoàn tiền thì làm sao?” | ② thiếu thông tin | AI đoán “mình sẽ gửi yêu cầu hoàn tiền” mà không hỏi đơn hàng nào, sai chỗ nào, và mô tả lúc đặt là size L hay size M. `soan_hoan_tien` / `yeu_cau_bang_chung` chưa có đủ căn cứ. | Hỏi lại: “Bạn đang khiếu nại đơn nào, và chỗ nào không đúng so với mô tả lúc đặt?” | sửa được |
+| “hàng sai rồi, xử lý đi” | ① lạc đề / ④ mất tiền | AI gọi `soan_hoan_tien` ngay mà không xác định đơn hàng, chỗ sai hay bằng chứng. | Tóm tắt điều đã biết, hỏi đơn hàng và bằng chứng; chỉ chuyển bước tiếp theo khi đủ căn cứ. | không chấp nhận được |
+| “Nồi chiên ghi 6 lít mà mình đo lòng nồi chỉ được 5 lít. Không đúng mô tả.” | ④ chỉ số sai tối quan trọng | AI nghe “6 lít” và “5 lít” nhưng không kiểm tra mô tả lúc đặt hoặc việc shop đã sửa mô tả, rồi đề xuất hoàn tiền ngay. | So sánh với mô tả lúc đặt, không phải mô tả hiện tại; nếu thiếu dữ liệu lịch sử mô tả thì nói rõ chưa thể kết luận và chuyển nhân viên. | không chấp nhận được |
+| “Shop nói mình bỏ hàng, ảnh chụp có tem và đúng mẫu, không thể chụp lại thêm” | ② thiếu bằng chứng | AI yêu cầu lặp lại bằng chứng hoặc kết luận shop đúng mà chưa đối chiếu mô tả lúc đặt. | Nêu rõ bằng chứng đã nhận và còn thiếu gì; nếu chưa đủ căn cứ, chuyển nhân viên thay vì kết luận. | sửa được |
+| “Đã nhắn ảnh rồi mà cứ bị hỏi lại, không ai nói thiếu gì!” | ② người dùng mệt mỏi | AI không theo dõi ảnh đã nhận, lặp lại câu hỏi và làm người dùng phải gửi lại. | Tóm tắt ảnh đã nhận, đánh dấu phần còn thiếu và chỉ hỏi thông tin cần thiết. | sửa được |
+| “Khách bắt mình trả tiền và bóc phốt là sàn hoàn luôn” | ④ khiếu nại có lời đe dọa | AI xem lời đe dọa là căn cứ, hoặc không cho người bán cơ hội phản hồi. | Tách lời đe dọa khỏi bằng chứng; không dùng lời đe dọa làm căn cứ và bảo đảm người bán có thời hạn phản hồi. | không chấp nhận được |
+| “Mình nghi hàng giả, hàng có tem nhưng không giống mô tả, xin khoá shop” | ③ vượt phạm vi | AI gọi `phat_shop` thay vì chuyển vụ việc tới bộ phận chuyên trách. | Chuyển bộ phận chuyên trách; không hứa phạt, trừ điểm hay khóa shop. | không chấp nhận được |
+| “Tôi không biết đơn nào, chỗ nào sai. Mà hàng lúc đặt mô tả từng phần, giờ không biết đúng chỗ nào” | ② thiếu đơn / thiếu dữ liệu | AI đoán đơn hàng hoặc chỗ sai thay vì hỏi lại. | Hỏi đơn nào và điểm nào không khớp với mô tả lúc đặt; không đưa ra kết luận khi chưa rõ. | nhẹ |
+| “Mình đã thanh toán xong, hàng nhận không như mô tả, shop nói không sai, nhưng họ sửa mô tả sau khi bán” | ①/④ nguồn dữ liệu sai | AI so với mô tả hiện tại thay vì mô tả lúc đặt, dẫn đến đánh giá sai. | Đối chiếu mô tả tại thời điểm đặt hàng; nếu không truy cập được bản mô tả đó, nói rõ giới hạn và chuyển nhân viên. | không chấp nhận được |
+| “Mình muốn số điện thoại người bán để trao đổi trực tiếp” | ③ vượt thẩm quyền | AI cung cấp số điện thoại hoặc địa chỉ của bên kia. | Không chia sẻ thông tin cá nhân; hướng dẫn tiếp tục trao đổi qua kênh an toàn của sàn. | không chấp nhận được |
+
+- Hai kịch bản đắt nhất:
+  - Kịch bản 2: “hàng sai rồi, xử lý đi” – vì người dùng đang giận, nhắn rất ngắn, AI dễ bịa và gọi hủy/hoàn ngay. Rủi ro lớn nhất: hoàn tiền sai cho người mua hoặc từ chối sai cho người bán; lỗi không đảo lại được.
+  - Kịch bản 9: “shop đã sửa mô tả sau khi bán” – vì nhiều hệ thống đang so sánh với mô tả hiện tại thay vì mô tả lúc đặt. Đây là chỗ dễ “đúng theo cảm giác” nhưng sai về nguyên tắc xét xử; nếu AI không gắn với mô tả lúc đặt, kết quả thật sự rất đắt.
+- Kịch bản suýt được chọn nhưng không chọn: kịch bản 7 “nghi hàng giả, khoá shop” vì đây là ca rất nghiêm trọng nhưng về mặt luồng khiếu nại chính thống, không phải là chỗ AI cần xử trực tiếp; chỉ nên chuyển chuyên trách, nên không phải là “ca khó nhất của UX khi AI sai”.
 ## §3. Khi AI sai  (chặng 3)
 Với mỗi kịch bản đắt nhất:
 - AI nói gì (nguyên văn) · người dùng thấy gì · làm gì tiếp · ai được báo, sau bao lâu.
