@@ -1,0 +1,58 @@
+# Bài nộp LAB5 — [T4] · Nhóm [ECOM123]
+[Danh sách thành viên và việc mỗi người làm — copy bảng từ README]
+**Lớp:** L3A · **Bàn / zone:** A2 · **Track:** T4
+
+| Họ và Tên | Mã Học Viên | Việc đã làm |
+|---|---|---|
+|  |  |  |
+|  |  |  |
+|  |  |  |
+
+## §1. Lát cắt & phạm vi
+
+### 1. Lát cắt
+
+Trong **Trò chuyện với Shopee**, khi **người mua** đang báo "hàng nhận không đúng mô tả", **AI tự hướng dẫn gửi yêu cầu trả hàng hoàn tiền, xin thêm bằng chứng, hay chuyển nhân viên**, để người mua biết đúng bước tiếp theo, và người bán không bị xử thua khi họ đúng.
+
+### 2. Ba việc tính năng KHÔNG làm
+
+1. **Không tự quyết định người mua hay người bán đúng, không tự động phê duyệt hoặc từ chối khiếu nại và hoàn tiền.** Vì quyết định sai có thể khiến một bên mất tiền và hàng, trong khi AI có thể chưa có đủ bằng chứng từ cả hai phía; những trường hợp này cần được nhân viên có thẩm quyền xem xét.
+
+2. **Không tự động xử phạt, trừ điểm uy tín hoặc khóa shop khi có khiếu nại.** Vì một lời tố cáo hoặc bằng chứng chưa được xác minh không đủ căn cứ để kết luận shop vi phạm; việc xử phạt có thể ảnh hưởng nghiêm trọng đến hoạt động kinh doanh của người bán và phải do bộ phận chuyên trách xử lý.
+
+3. **Không cung cấp số điện thoại, địa chỉ hoặc thông tin cá nhân của người mua cho người bán và ngược lại.** Vì việc chia sẻ thông tin riêng tư có thể xâm phạm quyền riêng tư, gây quấy rối hoặc tranh chấp trực tiếp giữa hai bên; mọi trao đổi phải được thực hiện qua hệ thống của Shopee.
+
+## §2. Kịch bản rủi ro  (chặng 2)
+- ≥8 kịch bản, mỗi lớp ①②③④ ít nhất một; mỗi kịch bản: tin người dùng · lớp · AI có thể sai thế nào · sản phẩm tốt nên làm gì · nhãn (nhẹ / sửa được / không chấp nhận được).
+- Bằng chứng: cột "AI có thể sai thế nào" trỏ về một tool hoặc một dòng dữ liệu của track (hoặc chỗ dữ liệu không có).
+- Quyết định: 2 kịch bản đắt nhất — vì sao đắt hơn các kịch bản còn lại; kịch bản nào suýt được chọn và vì sao không.
+
+## §3. Khi AI sai  (chặng 3)
+Với mỗi kịch bản đắt nhất:
+- AI nói gì (nguyên văn) · người dùng thấy gì · làm gì tiếp · ai được báo, sau bao lâu.
+- Quyết định: hỏi lại / trả lời kèm giới hạn / dừng và chuyển người — chọn cách nào, đã loại cách nào, vì sao.
+- Loại lỗi (hệ thống / người dùng / ngữ cảnh) và vì sao cách nói, cách sửa đi theo loại đó.
+- 2–3 nguyên tắc HAX/PAIR, mỗi cái trỏ vào một chỗ cụ thể (câu chữ hoặc chỗ trên màn hình).
+- Lỗi nào sửa câu chữ không cứu được (nếu có), và thiết kế cứu nó thế nào.
+
+## §4. Mức tự chủ  (chặng 4)
+Với mỗi tool:
+- Mức của nhóm (tự làm / cần người duyệt / cấm). Nếu cần người duyệt: ai duyệt · người duyệt thấy gì · quá hạn thì sao.
+- Lý do theo cost-of-error: sai thì ai chịu gì · đảo lại được không · chờ người thì mất gì.
+- Phương án đã cân nhắc và vì sao loại.
+Thêm:
+- Tool khó xếp nhất: mỗi người từng chọn gì, cái giá của mỗi phía (trỏ về kịch bản ở §2), nhóm chốt thế nào.
+- Thử mức đã đặt trên 2 kịch bản đắt nhất + 1 kịch bản bình thường: cái sai có bị chặn không? còn việc nào làm khi lẽ ra phải hỏi? người dùng bình thường có phải chờ vô ích không?
+- Luật thêm hoặc tool tách bước (nếu có), và vì sao.
+- Một mức tự chủ đã đổi lời hứa nào với người dùng.
+
+## §5. Prototype  (chặng 5)
+- Link hoặc file · công cụ · phần nào mock · có lời gọi AI thật không.
+- 1–2 ảnh có đánh số; mỗi số: thể hiện gì · nguyên tắc HAX/PAIR nào · mức tự chủ nào.
+- Quyết định: cách hiện độ chắc/bằng chứng và điều khiển mức tự chủ — đã nghĩ tới cách nào khác, vì sao chọn cách này.
+
+## §6. Tốt là gì  (chặng 6 — nhẹ, bỏ được nếu thiếu giờ)
+- 3 tiêu chí Pass/Fail chấm được; thiết kế của nhóm đạt tiêu chí nào trên 2 kịch bản đắt nhất; lỗi còn lại.
+
+## §7. Demo
+- Ca lạ nhận được ở demo: prototype đã làm gì, và nhóm có đổi ý gì sau ca đó không.
