@@ -54,6 +54,158 @@ Với mỗi kịch bản đắt nhất:
 - 2–3 nguyên tắc HAX/PAIR, mỗi cái trỏ vào một chỗ cụ thể (câu chữ hoặc chỗ trên màn hình).
 - Lỗi nào sửa câu chữ không cứu được (nếu có), và thiết kế cứu nó thế nào.
 
+## 3.1. Kịch bản đắt nhất #2: Người mua yêu cầu xử lý nhưng chưa cung cấp đủ thông tin
+
+### Tình huống
+
+Người mua nhắn: “Hàng sai rồi, xử lý đi”.
+
+AI có thể hiểu nhầm rằng người mua đã cung cấp đủ căn cứ và gọi tool `soan_hoan_tien` ngay lập tức. Điều này có thể dẫn đến yêu cầu hoàn tiền sai đơn hàng hoặc gây thiệt hại cho người bán khi chưa xác minh vấn đề.
+
+### Cách xử lý đề xuất
+
+**Phương án được chọn: Hỏi lại (Clarification).**
+
+AI không được tự động tạo yêu cầu hoàn tiền khi chưa xác định được đơn hàng và vấn đề cụ thể. Thay vào đó, AI cần hỏi người mua để thu thập thông tin còn thiếu.
+
+**Câu trả lời mẫu của AI:**
+
+> Mình có thể hỗ trợ bạn kiểm tra và xử lý vấn đề này. Bạn cho mình biết đơn hàng nào đang gặp sự cố và sản phẩm nhận được không đúng ở điểm nào nhé?
+>
+> Nếu có thể, bạn gửi thêm ảnh sản phẩm hoặc thông tin mô tả sản phẩm tại thời điểm đặt hàng để mình kiểm tra chính xác hơn. Hiện tại mình chưa gửi yêu cầu hoàn tiền vì chưa đủ thông tin để xác minh.
+
+### Người dùng nhìn thấy gì?
+
+- AI thông báo rõ thông tin nào còn thiếu.
+- Người mua biết cần cung cấp đơn hàng, mô tả vấn đề hoặc bằng chứng gì.
+- Chưa có yêu cầu hoàn tiền nào được gửi đi.
+- Người mua không bị hiểu nhầm rằng yêu cầu đã được xử lý thành công.
+
+### Các bước tiếp theo
+
+1. AI xác định đơn hàng mà người mua đang đề cập.
+2. AI hỏi rõ điểm khác biệt giữa sản phẩm nhận được và mô tả khi đặt hàng.
+3. AI tiếp nhận và kiểm tra bằng chứng người mua cung cấp.
+4. AI tóm tắt thông tin đã xác minh để người mua kiểm tra lại.
+5. Khi có đủ căn cứ, AI mới hướng dẫn người mua tạo yêu cầu trả hàng hoàn tiền.
+6. Nếu không thể xác định đơn hàng hoặc vấn đề vẫn chưa rõ, AI chuyển trường hợp cho nhân viên hỗ trợ.
+
+### Ai được thông báo?
+
+- **Người mua:** Được thông báo về thông tin còn thiếu và bước cần thực hiện.
+- **Người bán:** Chỉ được thông báo khi vụ việc đã được xác định và cần phản hồi theo quy trình.
+- **Nhân viên hỗ trợ:** Được chuyển trường hợp khi AI không thể xác minh hoặc xử lý an toàn.
+
+AI không tự cam kết thời gian xử lý nếu chưa có SLA chính thức từ hệ thống.
+
+### Vì sao chọn hỏi lại?
+
+- **Không chọn trả lời kèm giới hạn:** Vì AI chưa biết đơn hàng nào và vấn đề cụ thể là gì.
+- **Không chuyển nhân viên ngay:** Vì đây có thể chỉ là trường hợp thiếu thông tin, người mua có thể bổ sung nhanh chóng.
+- **Không gọi `soan_hoan_tien`:** Vì chưa có đủ căn cứ để tạo yêu cầu hoàn tiền.
+
+### Phân loại nguyên nhân AI có thể sai
+
+- **Lỗi ngữ cảnh:** Tin nhắn quá ngắn, thiếu thông tin về đơn hàng và vấn đề.
+- **Lỗi hệ thống:** Nếu hệ thống cho phép AI gọi tool hoàn tiền ngay cả khi chưa đủ dữ liệu đầu vào.
+
+### Nguyên tắc HAX/PAIR được áp dụng
+
+- **HAX G10 – Thu hẹp hành động khi có sự không chắc chắn:** AI phải hỏi lại thay vì tự suy đoán và thực hiện hành động có ảnh hưởng đến quyền lợi.
+- **HAX G2 – Làm rõ khả năng của AI:** AI cần nói rõ mình chưa đủ thông tin để xác minh, tránh tạo cảm giác rằng vấn đề đã được xử lý.
+- **PAIR – Feedback & Control:** Người mua được bổ sung thông tin và kiểm soát bước tiếp theo trước khi hệ thống thực hiện hành động.
+
+### Vì sao sửa câu chữ chưa đủ?
+
+Nếu chỉ sửa câu trả lời của AI thành “Bạn vui lòng cung cấp thêm thông tin”, hệ thống vẫn có thể gọi tool hoàn tiền ở phía sau.
+
+Do đó, cần có cơ chế kiểm soát ở cấp hệ thống:
+
+- Không cho phép gọi `soan_hoan_tien` khi chưa xác định được đơn hàng.
+- Kiểm tra các trường thông tin bắt buộc trước khi thực hiện hành động.
+- Yêu cầu AI hỏi lại nếu thiếu dữ liệu.
+- Ghi nhận trạng thái bằng chứng đã nhận để tránh hỏi người mua lặp lại.
+
+---
+
+## 3.2. Kịch bản đắt nhất #9: Người bán đã sửa mô tả sản phẩm sau khi người mua đặt hàng
+
+### Tình huống
+
+Người mua phản ánh sản phẩm nhận được không đúng mô tả và cho biết người bán đã sửa nội dung mô tả sau khi đơn hàng được đặt.
+
+AI có thể mắc lỗi khi chỉ đối chiếu sản phẩm thực tế với mô tả hiện tại trên Shopee. Nếu mô tả đã bị thay đổi, AI có thể kết luận sai rằng người bán không vi phạm, dù sản phẩm tại thời điểm đặt hàng thực sự không đúng mô tả.
+
+### Cách xử lý đề xuất
+
+**Phương án được chọn: Trả lời kèm giới hạn (Answer with limits).**
+
+AI cần giải thích rõ rằng việc xác minh phải dựa trên mô tả sản phẩm tại thời điểm người mua đặt hàng, không phải nội dung hiện tại.
+
+**Câu trả lời mẫu của AI:**
+
+> Mình sẽ kiểm tra thông tin mô tả sản phẩm tại thời điểm bạn đặt hàng để đối chiếu với sản phẩm đã nhận.
+>
+> Nội dung mô tả hiện tại có thể đã thay đổi, vì vậy mình chưa thể kết luận chỉ dựa trên thông tin đang hiển thị.
+>
+> Mình sẽ kiểm tra lịch sử thông tin sản phẩm và các bằng chứng liên quan. Nếu hệ thống không có dữ liệu lịch sử hoặc chưa đủ căn cứ xác minh, mình sẽ chuyển trường hợp này đến nhân viên hỗ trợ để kiểm tra thêm.
+
+### Người dùng nhìn thấy gì?
+
+- AI giải thích rõ thông tin nào sẽ được dùng để xác minh.
+- Người mua biết rằng mô tả hiện tại không phải căn cứ duy nhất để kết luận.
+- Người mua được thông báo nếu hệ thống không truy xuất được lịch sử mô tả.
+- AI không vội kết luận người mua hoặc người bán đúng khi chưa đủ bằng chứng.
+
+### Các bước tiếp theo
+
+1. AI xác định sản phẩm và đơn hàng đang bị khiếu nại.
+2. Hệ thống truy xuất mô tả sản phẩm tại thời điểm người mua đặt hàng.
+3. AI đối chiếu mô tả lịch sử với sản phẩm thực tế và bằng chứng của hai bên.
+4. AI tóm tắt những điểm đã xác minh và những thông tin còn thiếu.
+5. Nếu dữ liệu lịch sử đầy đủ, AI hướng dẫn bước xử lý tiếp theo theo quy trình.
+6. Nếu không có lịch sử mô tả hoặc không đủ căn cứ, AI chuyển trường hợp cho nhân viên hỗ trợ.
+
+### Ai được thông báo?
+
+- **Người mua:** Được thông báo về quá trình xác minh và kết quả kiểm tra.
+- **Người bán:** Được thông báo khi cần cung cấp thông tin hoặc phản hồi về nội dung khiếu nại.
+- **Nhân viên hỗ trợ:** Nhận trường hợp khi dữ liệu lịch sử không có hoặc không đủ để đưa ra kết luận.
+
+Thời gian xử lý cần tuân theo SLA thực tế của Shopee. AI không tự đưa ra thời hạn khi chưa có thông tin chính thức.
+
+### Vì sao chọn trả lời kèm giới hạn?
+
+- **Không tự động kết luận:** Vì mô tả hiện tại có thể khác mô tả tại thời điểm đặt hàng.
+- **Không chỉ yêu cầu người mua gửi thêm ảnh:** Vì ảnh sản phẩm không thể thay thế dữ liệu lịch sử mô tả.
+- **Không tự động hoàn tiền hoặc bác khiếu nại:** Vì cần đối chiếu thông tin lịch sử trước khi đưa ra kết luận.
+- **Chuyển nhân viên khi cần thiết:** Nếu hệ thống không có dữ liệu lịch sử hoặc không thể xác minh đáng tin cậy.
+
+### Phân loại nguyên nhân AI có thể sai
+
+- **Lỗi hệ thống:** Không lưu hoặc không truy xuất được lịch sử mô tả sản phẩm theo thời điểm.
+- **Lỗi ngữ cảnh:** AI không phân biệt mô tả hiện tại với mô tả tại thời điểm đặt hàng.
+
+### Nguyên tắc HAX/PAIR được áp dụng
+
+- **HAX G2 – Làm rõ khả năng của AI:** AI phải nói rõ dữ liệu nào có thể và chưa thể kiểm tra.
+- **HAX G11 – Giải thích căn cứ:** AI cần cho người mua biết kết luận dựa trên dữ liệu lịch sử nào, thay vì chỉ đưa ra kết quả.
+- **PAIR – Explainability:** Quá trình đối chiếu và căn cứ xác minh cần được trình bày minh bạch để người mua và người bán hiểu vì sao có kết quả đó.
+
+### Vì sao sửa câu chữ chưa đủ?
+
+Nếu chỉ yêu cầu AI nói “Tôi sẽ kiểm tra mô tả lúc đặt hàng”, nhưng hệ thống không lưu hoặc không truy xuất được dữ liệu lịch sử, AI vẫn có thể đưa ra kết luận sai.
+
+Do đó, cần thay đổi ở cấp hệ thống:
+
+- Lưu phiên bản mô tả sản phẩm tại thời điểm phát sinh đơn hàng.
+- Cho phép truy xuất lịch sử chỉnh sửa mô tả.
+- Ghi nhận thời điểm thay đổi nội dung sản phẩm.
+- Không cho phép AI kết luận tự động nếu thiếu dữ liệu lịch sử cần thiết.
+- Chuyển nhân viên hỗ trợ khi không thể xác minh bằng dữ liệu đáng tin cậy.
+
+---
+
 ## §4. Mức tự chủ  (chặng 4)
 Với mỗi tool:
 - Mức của nhóm (tự làm / cần người duyệt / cấm). Nếu cần người duyệt: ai duyệt · người duyệt thấy gì · quá hạn thì sao.
