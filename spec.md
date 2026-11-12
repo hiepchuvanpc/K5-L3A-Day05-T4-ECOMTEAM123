@@ -4,7 +4,7 @@
 
 | Họ và Tên | Mã Học Viên | Việc đã làm |
 |---|---|---|
-|  |  |  |
+|Chử Văn Hiệp|2A202603382|  |
 |  |  |  |
 |  |  |  |
 
@@ -23,11 +23,6 @@ Trong **Trò chuyện với Shopee**, khi **người mua** đang báo "hàng nh�
 3. **Không cung cấp số điện thoại, địa chỉ hoặc thông tin cá nhân của người mua cho người bán và ngược lại.** Vì việc chia sẻ thông tin riêng tư có thể xâm phạm quyền riêng tư, gây quấy rối hoặc tranh chấp trực tiếp giữa hai bên; mọi trao đổi phải được thực hiện qua hệ thống của Shopee.
 
 ## §2. Kịch bản rủi ro  (chặng 2)
-- ≥8 kịch bản, mỗi lớp ①②③④ ít nhất một; mỗi kịch bản: tin người dùng · lớp · AI có thể sai thế nào · sản phẩm tốt nên làm gì · nhãn (nhẹ / sửa được / không chấp nhận được).
-- Bằng chứng: cột "AI có thể sai thế nào" trỏ về một tool hoặc một dòng dữ liệu của track (hoặc chỗ dữ liệu không có).
-- Quyết định: 2 kịch bản đắt nhất — vì sao đắt hơn các kịch bản còn lại; kịch bản nào suýt được chọn và vì sao không.
-## §2. Kịch bản rủi ro
-10 kịch bản, phủ ①②③④; hai kịch bản đắt nhất được khoanh ở dưới.
 
 | Tin người dùng | Lớp | AI có thể sai thế nào | Sản phẩm tốt nên làm gì | Nhãn |
 |---|---|---|---|---|
@@ -299,15 +294,78 @@ Dựa trên nguyên tắc không tự ý phán quyết và không tự động h
 
 ### 4.4. Đổi lời hứa với người dùng
 
-- **Lời hứa cũ (thiếu mức tự chủ):** *"Shopee AI tự động giải quyết tranh chấp và hoàn tiền tức thì cho bạn."*  
+- **Lời hứa cũ (thiếu mức tự chủ):** *"Shopee AI tự động giải quyết tranh chấp và hoàn tiền tức thì cho bạn."*
   *(Hậu quả: Tạo kỳ vọng ảo khiến khách nghĩ chỉ cần nhắn vài chữ là tiền về; đồng thời khiến người bán hoang mang vì sợ bị bot tước đoạt tiền oan).*
-- **Lời hứa mới (sau khi đặt mức tự chủ):** *"Shopee AI hỗ trợ bạn thu thập chứng cứ, bảo toàn nguyên vẹn lịch sử đơn hàng và chuẩn bị hồ sơ minh bạch để chuyên viên xử lý công bằng nhất cho cả hai bên."*  
+- **Lời hứa mới (sau khi đặt mức tự chủ):** *"Shopee AI hỗ trợ bạn thu thập chứng cứ, bảo toàn nguyên vẹn lịch sử đơn hàng và chuẩn bị hồ sơ minh bạch để chuyên viên xử lý công bằng nhất cho cả hai bên."*
   *(Giá trị mang lại: Khách hàng hiểu rõ vai trò trợ lý thu thập bằng chứng của AI; cả Người mua và Người bán đều an tâm vì phán quyết cuối cùng luôn có sự thẩm định và bảo hộ của con người).*
 
 ## §5. Prototype  (chặng 5)
-- Link hoặc file · công cụ · phần nào mock · có lời gọi AI thật không.
-- 1–2 ảnh có đánh số; mỗi số: thể hiện gì · nguyên tắc HAX/PAIR nào · mức tự chủ nào.
-- Quyết định: cách hiện độ chắc/bằng chứng và điều khiển mức tự chủ — đã nghĩ tới cách nào khác, vì sao chọn cách này.
+## §5. Prototype (chặng 5)
+
+### 5.1. Link và công cụ thực hiện
+
+- **File prototype:** `prototype/index.html`
+- **Công cụ:** HTML, CSS và JavaScript thuần.
+- **Hình thức:** Giao diện web mô phỏng khung trò chuyện với Shopee.
+- **AI thật:** Không có lời gọi AI thật. Nội dung phản hồi được dựng sẵn theo từng kịch bản để kiểm tra luồng quyết định và mức tự chủ.
+- **Dữ liệu:** Dữ liệu đơn hàng, mô tả sản phẩm, bằng chứng và trạng thái xử lý đều là dữ liệu mô phỏng.
+- **Phạm vi mock:** Việc truy xuất lịch sử mô tả, gửi bằng chứng, tạo bản nháp hoàn tiền, nhân viên duyệt và chuyển chuyên viên đều được mô phỏng bằng JavaScript. Không có giao dịch hoàn tiền thật và không kết nối hệ thống Shopee.
+
+### 5.2. Các màn hình và nguyên tắc HAX/PAIR
+
+**Ảnh 1 – Kịch bản người mua báo hàng sai nhưng thiếu thông tin**
+
+- Thể hiện: AI hỏi lại mã đơn hàng và điểm sai lệch thay vì tự tạo yêu cầu hoàn tiền.
+- HAX G10: Thu hẹp hành động khi chưa chắc chắn. AI chỉ hỏi thông tin còn thiếu.
+- HAX G2: Làm rõ giới hạn của AI bằng cách thông báo chưa đủ dữ liệu để xác minh.
+- PAIR Feedback & Control: Người mua chủ động cung cấp thông tin trước khi hệ thống chuyển sang bước tiếp theo.
+- Mức tự chủ: `yeu_cau_bang_chung` tự làm; `soan_de_xuat_hoan_tien` cần người duyệt.
+
+**Ảnh 2 – Kịch bản người bán sửa mô tả sau khi bán**
+
+- Thể hiện: AI phân biệt mô tả hiện tại và snapshot mô tả tại thời điểm đặt hàng; không tự động kết luận khi cần xác minh lịch sử.
+- HAX G2: Thông báo rõ giới hạn dữ liệu và khả năng xác minh.
+- HAX G11: Giải thích căn cứ bằng cách chỉ ra dữ liệu lịch sử được sử dụng.
+- PAIR Explainability: Người dùng và nhân viên có thể hiểu dữ liệu nào đang được dùng để đối chiếu.
+- Mức tự chủ: AI được quyền chuẩn bị hồ sơ và chuyển chuyên viên; không được tự từ chối khiếu nại hoặc hoàn tiền.
+
+### 5.3. Cách thể hiện độ chắc chắn và bằng chứng
+
+Nhóm không sử dụng phần trăm tự tin của AI vì con số này có thể tạo cảm giác chính xác giả tạo.
+
+Thay vào đó, prototype hiển thị:
+
+1. Thông tin đã có: mã đơn, sản phẩm, nội dung trao đổi và bằng chứng đã nhận.
+2. Thông tin còn thiếu: dữ liệu lịch sử mô tả, ảnh sản phẩm hoặc thông tin cần xác minh.
+3. Trạng thái xử lý: chưa đủ thông tin, đang chờ bổ sung, đã tạo bản nháp hoặc đã chuyển nhân viên.
+
+AI phải phân biệt rõ thông tin đã xác minh và thông tin mới chỉ do người dùng cung cấp.
+
+### 5.4. Cách điều khiển mức tự chủ
+
+Nhóm chọn thể hiện mức tự chủ thông qua quyền thực hiện hành động của từng tool, thay vì chỉ hiển thị nhãn mức tự chủ.
+
+- **Tự làm:** AI được hỏi bổ sung bằng chứng và chuyển hồ sơ cho chuyên viên.
+- **Cần người duyệt:** AI chỉ tạo bản nháp đề xuất hoàn tiền. Nhân viên phải kiểm tra và xác nhận trước khi thực hiện quyết định tài chính.
+- **Cấm:** Không cung cấp nút trừ điểm uy tín, khóa shop hoặc xử phạt người bán.
+
+Prototype có đường chuyển nhân viên để xử lý các trường hợp AI không đủ căn cứ. Hồ sơ được chuyển kèm thông tin đã thu thập nhằm tránh yêu cầu người dùng kể lại từ đầu.
+
+### 5.5. Các phương án thiết kế đã cân nhắc
+
+**Phương án 1: Hiển thị phần trăm tự tin của AI**
+
+Nhóm cân nhắc hiển thị AI tự tin 70%, 80% hoặc 90%. Tuy nhiên, phương án này bị loại vì người dùng khó biết con số được tính dựa trên dữ liệu nào. Độ tự tin cao không đồng nghĩa với bằng chứng đầy đủ.
+
+**Phương án 2: Cho AI tự động hoàn tiền khi nhận đủ ảnh**
+
+Nhóm loại phương án này vì ảnh có thể chưa phản ánh đầy đủ tình trạng hàng hóa hoặc chưa xác minh được mô tả tại thời điểm đặt hàng. Sai lầm có thể gây thiệt hại tài chính cho người bán và người mua.
+
+**Phương án 3: Hiển thị bằng chứng, thông tin còn thiếu và yêu cầu người có thẩm quyền xác nhận**
+
+Nhóm chọn phương án này vì người dùng có thể kiểm tra căn cứ, bổ sung thông tin và biết rõ trạng thái xử lý. AI vẫn giảm thời gian chuẩn bị hồ sơ nhưng không vượt quá thẩm quyền đã xác định ở §4.
+
+**Kết luận:** Prototype ưu tiên khả năng kiểm soát, giải thích căn cứ và chuyển giao an toàn hơn là tự động hóa toàn bộ quy trình khiếu nại.
 
 ## §6. Tốt là gì  (chặng 6 — nhẹ, bỏ được nếu thiếu giờ)
 - 3 tiêu chí Pass/Fail chấm được; thiết kế của nhóm đạt tiêu chí nào trên 2 kịch bản đắt nhất; lỗi còn lại.
