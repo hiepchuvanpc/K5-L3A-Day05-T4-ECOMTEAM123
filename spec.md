@@ -1,374 +1,202 @@
-# Bài nộp LAB5 — [T4] · Nhóm [ECOM123]
-[Danh sách thành viên và việc mỗi người làm — copy bảng từ README]
+# Bài nộp LAB5 — T4 · Nhóm ECOM123
+
 **Lớp:** L3A · **Bàn / zone:** A2 · **Track:** T4
 
-| Họ và Tên | Mã Học Viên | Việc đã làm |
+| Họ và tên | Mã học viên | Việc đã làm |
 |---|---|---|
-|Chử Văn Hiệp|2A202603382|  |
-|  |  |  |
-|  |  |  |
+| Chử Văn Hiệp | 2A202603382 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
+| Nguyễn Tiến Khoa | 2A202603460 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
+| Nguyễn Thanh Liêm | 2A202603358 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
+**Căn cứ và giới hạn bài nộp:** Tài liệu này hoàn thiện theo `03-spec-template.md`, bản spec ban đầu và [prototype hiện có](propotype/index.html). Kho mã chưa có README, tài liệu track gốc, `02-guide.md`, `04-rubric.md` hoặc biên bản demo. Vì vậy, không tự bổ sung tên thành viên, ý kiến từng người, dữ liệu track hay kết quả demo. Lát cắt và tên tool được kế thừa từ bản spec ban đầu; cần đối chiếu lại track khi có tài liệu. Các quy tắc vận hành bên dưới là **thiết kế đề xuất của nhóm**, không phải chính sách hoặc SLA đã xác nhận của Shopee. Kết quả kiểm tra prototype được tách rõ khỏi hành vi mong muốn.
 
 ## §1. Lát cắt & phạm vi
 
-### 1. Lát cắt
+### Lát cắt
 
-Trong **Trò chuyện với Shopee**, khi **người mua** đang báo "hàng nhận không đúng mô tả", **AI tự hướng dẫn gửi yêu cầu trả hàng hoàn tiền, xin thêm bằng chứng, hay chuyển nhân viên**, để người mua biết đúng bước tiếp theo, và người bán không bị xử thua khi họ đúng.
+Trong **Trò chuyện với Shopee**, khi **người mua** đang báo “hàng nhận không đúng mô tả”, **AI tự hướng dẫn gửi yêu cầu trả hàng hoàn tiền, xin thêm bằng chứng, hay chuyển nhân viên**, để người mua biết đúng bước tiếp theo, và người bán không bị xử thua khi họ đúng.
 
-### 2. Ba việc tính năng KHÔNG làm
+Đây là lát cắt kế thừa từ bản spec của nhóm, chưa đối chiếu nguyên văn với track gốc.
 
-1. **Không tự quyết định người mua hay người bán đúng, không tự động phê duyệt hoặc từ chối khiếu nại và hoàn tiền.** Vì quyết định sai có thể khiến một bên mất tiền và hàng, trong khi AI có thể chưa có đủ bằng chứng từ cả hai phía; những trường hợp này cần được nhân viên có thẩm quyền xem xét.
+### Ba việc tính năng KHÔNG làm
 
-2. **Không tự động xử phạt, trừ điểm uy tín hoặc khóa shop khi có khiếu nại.** Vì một lời tố cáo hoặc bằng chứng chưa được xác minh không đủ căn cứ để kết luận shop vi phạm; việc xử phạt có thể ảnh hưởng nghiêm trọng đến hoạt động kinh doanh của người bán và phải do bộ phận chuyên trách xử lý.
+1. **Không tự phán quyết, hoàn tiền hoặc bác khiếu nại:** AI có thể thiếu bằng chứng của một bên; quyết định tài chính phải có người có thẩm quyền duyệt.
+2. **Không xử phạt, trừ điểm uy tín hoặc khóa shop:** Chế tài vượt phạm vi hỗ trợ khiếu nại đơn hàng, cần bộ phận chuyên trách kiểm tra độc lập.
+3. **Không cung cấp thông tin liên hệ riêng tư của bên kia:** Tránh lộ dữ liệu và quấy rối; hướng dẫn trao đổi trong kênh hỗ trợ của sàn.
 
-3. **Không cung cấp số điện thoại, địa chỉ hoặc thông tin cá nhân của người mua cho người bán và ngược lại.** Vì việc chia sẻ thông tin riêng tư có thể xâm phạm quyền riêng tư, gây quấy rối hoặc tranh chấp trực tiếp giữa hai bên; mọi trao đổi phải được thực hiện qua hệ thống của Shopee.
+## §2. Kịch bản rủi ro (chặng 2)
 
-## §2. Kịch bản rủi ro  (chặng 2)
+Do thiếu định nghĩa bốn lớp từ track gốc, bài dùng quy ước làm việc: **① sai/lệch ngữ cảnh hoặc nguồn dữ liệu; ② thiếu thông tin/bằng chứng; ③ vượt phạm vi hoặc thẩm quyền; ④ hậu quả nghiêm trọng về tiền/quyền lợi.** Các lớp có thể giao nhau; cần đối chiếu quy ước với tài liệu lớp trước khi nộp.
 
-| Tin người dùng | Lớp | AI có thể sai thế nào | Sản phẩm tốt nên làm gì | Nhãn |
-|---|---|---|---|---|
-| “Mình đặt áo size L mà nhận size M, mặc không vừa. Shop nhắn nhận là gửi nhầm rồi. Mình muốn trả hàng hoàn tiền thì làm sao?” | ② thiếu thông tin | AI đoán “mình sẽ gửi yêu cầu hoàn tiền” mà không hỏi đơn hàng nào, sai chỗ nào, và mô tả lúc đặt là size L hay size M. `soan_hoan_tien` / `yeu_cau_bang_chung` chưa có đủ căn cứ. | Hỏi lại: “Bạn đang khiếu nại đơn nào, và chỗ nào không đúng so với mô tả lúc đặt?” | sửa được |
-| “hàng sai rồi, xử lý đi” | ① lạc đề / ④ mất tiền | AI gọi `soan_hoan_tien` ngay mà không xác định đơn hàng, chỗ sai hay bằng chứng. | Tóm tắt điều đã biết, hỏi đơn hàng và bằng chứng; chỉ chuyển bước tiếp theo khi đủ căn cứ. | không chấp nhận được |
-| “Nồi chiên ghi 6 lít mà mình đo lòng nồi chỉ được 5 lít. Không đúng mô tả.” | ④ chỉ số sai tối quan trọng | AI nghe “6 lít” và “5 lít” nhưng không kiểm tra mô tả lúc đặt hoặc việc shop đã sửa mô tả, rồi đề xuất hoàn tiền ngay. | So sánh với mô tả lúc đặt, không phải mô tả hiện tại; nếu thiếu dữ liệu lịch sử mô tả thì nói rõ chưa thể kết luận và chuyển nhân viên. | không chấp nhận được |
-| “Shop nói mình bỏ hàng, ảnh chụp có tem và đúng mẫu, không thể chụp lại thêm” | ② thiếu bằng chứng | AI yêu cầu lặp lại bằng chứng hoặc kết luận shop đúng mà chưa đối chiếu mô tả lúc đặt. | Nêu rõ bằng chứng đã nhận và còn thiếu gì; nếu chưa đủ căn cứ, chuyển nhân viên thay vì kết luận. | sửa được |
-| “Đã nhắn ảnh rồi mà cứ bị hỏi lại, không ai nói thiếu gì!” | ② người dùng mệt mỏi | AI không theo dõi ảnh đã nhận, lặp lại câu hỏi và làm người dùng phải gửi lại. | Tóm tắt ảnh đã nhận, đánh dấu phần còn thiếu và chỉ hỏi thông tin cần thiết. | sửa được |
-| “Khách bắt mình trả tiền và bóc phốt là sàn hoàn luôn” | ④ khiếu nại có lời đe dọa | AI xem lời đe dọa là căn cứ, hoặc không cho người bán cơ hội phản hồi. | Tách lời đe dọa khỏi bằng chứng; không dùng lời đe dọa làm căn cứ và bảo đảm người bán có thời hạn phản hồi. | không chấp nhận được |
-| “Mình nghi hàng giả, hàng có tem nhưng không giống mô tả, xin khoá shop” | ③ vượt phạm vi | AI gọi `phat_shop` thay vì chuyển vụ việc tới bộ phận chuyên trách. | Chuyển bộ phận chuyên trách; không hứa phạt, trừ điểm hay khóa shop. | không chấp nhận được |
-| “Tôi không biết đơn nào, chỗ nào sai. Mà hàng lúc đặt mô tả từng phần, giờ không biết đúng chỗ nào” | ② thiếu đơn / thiếu dữ liệu | AI đoán đơn hàng hoặc chỗ sai thay vì hỏi lại. | Hỏi đơn nào và điểm nào không khớp với mô tả lúc đặt; không đưa ra kết luận khi chưa rõ. | nhẹ |
-| “Mình đã thanh toán xong, hàng nhận không như mô tả, shop nói không sai, nhưng họ sửa mô tả sau khi bán” | ①/④ nguồn dữ liệu sai | AI so với mô tả hiện tại thay vì mô tả lúc đặt, dẫn đến đánh giá sai. | Đối chiếu mô tả tại thời điểm đặt hàng; nếu không truy cập được bản mô tả đó, nói rõ giới hạn và chuyển nhân viên. | không chấp nhận được |
-| “Mình muốn số điện thoại người bán để trao đổi trực tiếp” | ③ vượt thẩm quyền | AI cung cấp số điện thoại hoặc địa chỉ của bên kia. | Không chia sẻ thông tin cá nhân; hướng dẫn tiếp tục trao đổi qua kênh an toàn của sàn. | không chấp nhận được |
+Bằng chứng dưới đây trỏ tới tool và các khóa dữ liệu/hàm có thật trong `propotype/index.html`; không coi dữ liệu mock là dữ liệu track hay giao dịch thật.
 
-- Hai kịch bản đắt nhất:
-  - Kịch bản 2: “hàng sai rồi, xử lý đi” – vì người dùng đang giận, nhắn rất ngắn, AI dễ bịa và gọi hủy/hoàn ngay. Rủi ro lớn nhất: hoàn tiền sai cho người mua hoặc từ chối sai cho người bán; lỗi không đảo lại được.
-  - Kịch bản 9: “shop đã sửa mô tả sau khi bán” – vì nhiều hệ thống đang so sánh với mô tả hiện tại thay vì mô tả lúc đặt. Đây là chỗ dễ “đúng theo cảm giác” nhưng sai về nguyên tắc xét xử; nếu AI không gắn với mô tả lúc đặt, kết quả thật sự rất đắt.
-- Kịch bản suýt được chọn nhưng không chọn: kịch bản 7 “nghi hàng giả, khoá shop” vì đây là ca rất nghiêm trọng nhưng về mặt luồng khiếu nại chính thống, không phải là chỗ AI cần xử trực tiếp; chỉ nên chuyển chuyên trách, nên không phải là “ca khó nhất của UX khi AI sai”.
-## §3. Khi AI sai  (chặng 3)
-Với mỗi kịch bản đắt nhất:
-- AI nói gì (nguyên văn) · người dùng thấy gì · làm gì tiếp · ai được báo, sau bao lâu.
-- Quyết định: hỏi lại / trả lời kèm giới hạn / dừng và chuyển người — chọn cách nào, đã loại cách nào, vì sao.
-- Loại lỗi (hệ thống / người dùng / ngữ cảnh) và vì sao cách nói, cách sửa đi theo loại đó.
-- 2–3 nguyên tắc HAX/PAIR, mỗi cái trỏ vào một chỗ cụ thể (câu chữ hoặc chỗ trên màn hình).
-- Lỗi nào sửa câu chữ không cứu được (nếu có), và thiết kế cứu nó thế nào.
+| ID | Tin người dùng | Lớp | AI có thể sai thế nào và căn cứ cụ thể | Sản phẩm tốt nên làm gì | Nhãn |
+|---|---|---|---|---|---|
+| KB1 | “Mình đặt áo size L mà nhận size M. Shop nhận gửi nhầm rồi, trả hàng sao?” | ② | Coi lời kể là bằng chứng đã xác minh; `cases.normal.proof` vẫn ghi thiếu ảnh tem và ảnh chat gốc. | Xác nhận đơn; xin đúng ảnh còn thiếu, cho kiểm tra hồ sơ rồi mới soạn đề xuất. | sửa được |
+| KB2 | “Hàng sai rồi, xử lý đi.” | ②④ | Đoán đơn rồi gọi `soan_hoan_tien`; `cases.short.proof` chưa có mã đơn, mô tả lúc đặt và loại sai lệch. | Hỏi đơn nào và sai ở đâu; chặn soạn hồ sơ tài chính khi chưa xác định được đơn. | không chấp nhận được |
+| KB3 | “Nồi chiên ghi 6 lít mà lòng nồi mình đo chỉ được 5 lít.” | ①④ | Coi hai phép đo là cùng một đại lượng và kết luận shop sai. Dữ liệu `cases.history` không có phương pháp đo hoặc định nghĩa dung tích. | Xin cách đo và mô tả gốc; ghi rõ chưa đủ căn cứ, chuyển chuyên viên nếu cần đánh giá kỹ thuật. | không chấp nhận được |
+| KB4 | “Ảnh có tem và đúng mẫu rồi, mình không chụp lại được.” | ② | `yeu_cau_bang_chung` tiếp tục xin ảnh giống hệt hoặc suy diễn không gửi lại là khiếu nại sai. Prototype chỉ có cờ `proofAdded`, chưa có danh mục tệp đã nhận. | Liệt kê bằng chứng đã có, hỏi phần thiếu và cho chuyển nhân viên nếu không thể bổ sung. | sửa được |
+| KB5 | “Gửi ảnh rồi mà cứ bị hỏi lại, thiếu gì thì nói rõ!” | ② | `addProof()` đổi cờ nhưng `render()` vẫn lấy nội dung tĩnh từ `c.proof`, nên khung bằng chứng có thể vẫn báo thiếu. | Cập nhật trạng thái theo từng bằng chứng; không yêu cầu lại phần đã nhận. | sửa được |
+| KB6 | “Khách dọa bóc phốt để ép shop hoàn tiền ngay.” | ③④ | Dùng lời đe dọa để kích hoạt `soan_hoan_tien` hoặc bỏ qua phản hồi người bán. | Tách lời đe dọa khỏi chứng cứ; chuyển nhân viên và cho hai bên trình bày qua kênh chính thức. | không chấp nhận được |
+| KB7 | “Mình nghi hàng giả, khóa shop ngay.” | ③④ | Gọi `phat_shop` dù chưa xác minh. Bảng `cases.*.tools` đã đặt tool này ở mức Cấm. | Ghi nhận phản ánh, chuyển chuyên trách; không hứa khóa hay phạt shop. | không chấp nhận được |
+| KB8 | “Không nhớ đơn nào, cũng không rõ khác mô tả chỗ nào.” | ② | Tự chọn đơn hoặc tạo chi tiết sai lệch để đi tiếp; `makeDraft()` hiện không kiểm tra mã đơn hay nội dung bằng chứng. | Hướng dẫn xác định đơn, cho người mua xác nhận; chưa tìm được thì chưa soạn đề xuất. | sửa được |
+| KB9 | “Shop sửa mô tả sau khi bán, lúc đặt là 6 lít, giờ chỉ còn 5 lít.” | ①④ | Lấy mô tả hiện tại để gọi `tu_choi_khieu_nai`. `cases.history.proof` có snapshot 6 lít nhưng ghi rõ là mô phỏng và chưa xác minh tính toàn vẹn. | Tách mô tả hiện tại khỏi snapshot lúc đặt; không kết luận, chuyển chuyên viên đối chiếu. | không chấp nhận được |
+| KB10 | “Cho tôi số điện thoại và địa chỉ riêng của người bán.” | ③ | Tiết lộ dữ liệu ngoài phạm vi; prototype không có tool hoặc dữ liệu liên hệ riêng tư để đáp ứng. | Không cung cấp dữ liệu riêng tư; chỉ dẫn kênh trao đổi được phép. | không chấp nhận được |
 
-## 3.1. Kịch bản đắt nhất #2: Người mua yêu cầu xử lý nhưng chưa cung cấp đủ thông tin
+### Quyết định chọn hai kịch bản đắt nhất
 
-### Tình huống
+- **Chọn KB2:** Thiếu thông tin ngay đầu luồng nhưng có thể dẫn tới quyết định sai đơn. Nếu chỉ sửa câu trả lời mà không chặn hành động thì rủi ro vẫn tồn tại. Hậu quả tài chính khó khắc phục hơn việc hỏi ảnh lặp lại ở KB4–KB5.
+- **Chọn KB9:** Có vẻ đủ dữ liệu nhưng nguồn có thể sai thời điểm; người duyệt cũng dễ bị dẫn sai nếu hồ sơ chỉ hiện mô tả hiện tại. Sai lầm có thể làm người mua mất quyền lợi hoặc người bán bị hoàn tiền oan.
+- **Suýt chọn KB7:** Thiệt hại khóa shop rất lớn, nhưng có thể loại quyền `phat_shop` khỏi trợ lý và chuyển chuyên trách ngay. KB2 và KB9 khó hơn vì nằm trong luồng hỗ trợ chính, cần vừa giúp người mua đi tiếp vừa kiểm soát bằng chứng.
+- Đây là lựa chọn theo mức độ nghiêm trọng và độ khó kiểm soát, không phải xếp hạng theo tần suất; chưa có dữ liệu thực tế để ước lượng xác suất.
 
-Người mua nhắn: “Hàng sai rồi, xử lý đi”.
+## §3. Khi AI sai (chặng 3)
 
-AI có thể hiểu nhầm rằng người mua đã cung cấp đủ căn cứ và gọi tool `soan_hoan_tien` ngay lập tức. Điều này có thể dẫn đến yêu cầu hoàn tiền sai đơn hàng hoặc gây thiệt hại cho người bán khi chưa xác minh vấn đề.
+### 3.1. KB2 — Thiếu đơn hàng và nội dung sai lệch
 
-### Cách xử lý đề xuất
+**Câu sai giả định cần ngăn:** “Mình đã gửi yêu cầu hoàn tiền cho đơn hàng của bạn.” Đây là ví dụ lỗi thiết kế, không phải phản hồi đã quan sát từ AI thật.
 
-**Phương án được chọn: Hỏi lại (Clarification).**
+**Câu đúng hiện có trong `cases.short.reply`:**
 
-AI không được tự động tạo yêu cầu hoàn tiền khi chưa xác định được đơn hàng và vấn đề cụ thể. Thay vào đó, AI cần hỏi người mua để thu thập thông tin còn thiếu.
+> Mình có thể hỗ trợ bạn kiểm tra. Bạn đang nói đến đơn hàng nào và sản phẩm nhận được không đúng ở điểm nào so với mô tả lúc đặt hàng?
 
-**Câu trả lời mẫu của AI:**
+- **Người dùng thấy:** Câu hỏi trên và thông báo chưa tạo yêu cầu hoàn tiền, thiếu mã đơn và nội dung sai lệch. Nút “Bổ sung thông tin đơn hàng” và “Chuyển nhân viên” cho biết bước tiếp theo (Ảnh 1).
+- **Làm tiếp theo thiết kế:** Người mua chọn/xác nhận đơn và mô tả sai lệch; hệ thống kiểm tra quyền truy cập đơn, tóm tắt phần đã có rồi chỉ xin bằng chứng còn thiếu. Chưa đủ đầu vào thì chưa cho tạo bản nháp. Nếu người mua không thể bổ sung hoặc yêu cầu hỗ trợ, chuyển hồ sơ kèm hội thoại.
+- **Ai được báo, khi nào:** Người mua nhận câu hỏi trong lượt trả lời hiện tại. Nhân viên nhận hồ sơ khi thao tác chuyển được hệ thống xác nhận thành công; chỉ sau xác nhận mới hiện “Đã chuyển”. Người bán chỉ được báo khi đã xác định đúng đơn và cần phản hồi. Chưa có SLA nhận việc hoặc thời gian giải quyết được xác nhận; phải hiển thị trạng thái chờ thay vì tự hứa số giờ. Prototype chỉ mô phỏng thông báo trên màn hình.
+- **Quyết định:** Chọn **hỏi lại** vì người mua có thể bổ sung ngay. Loại trả lời kèm giới hạn như một kết luận vì chưa biết đang xét đơn nào. Chưa chuyển người ngay mặc định vì làm tăng thời gian chờ cho lỗi thiếu thông tin đơn giản; vẫn giữ quyền yêu cầu chuyển.
+- **Loại lỗi:** Thiếu ngữ cảnh là nguyên nhân ban đầu; cho phép hành động khi thiếu trường bắt buộc là lỗi hệ thống. Câu trả lời trung tính, không đổ lỗi cho người mua; cách sửa là giúp bổ sung dữ liệu và chặn hành động không đủ điều kiện.
+- **HAX/PAIR áp dụng:** Thu hẹp hành động khi không chắc chắn → câu hỏi mã đơn/điểm sai; làm rõ giới hạn → trạng thái “Chưa tạo yêu cầu hoàn tiền”; phản hồi và kiểm soát → hai nút bổ sung/chuyển nhân viên. Các số 1–3 trong khung chú thích của Ảnh 1 tương ứng ba điểm này.
+- **Câu chữ không cứu được:** Nút bổ sung chỉ bật cờ rồi cho tạo bản nháp dù chưa nhập dữ liệu. Cần kiểm tra trường bắt buộc tại nơi thực thi hành động, không chỉ ẩn nút trên giao diện. Đây là yêu cầu thiết kế **chưa được prototype thực thi**.
 
-> Mình có thể hỗ trợ bạn kiểm tra và xử lý vấn đề này. Bạn cho mình biết đơn hàng nào đang gặp sự cố và sản phẩm nhận được không đúng ở điểm nào nhé?
->
-> Nếu có thể, bạn gửi thêm ảnh sản phẩm hoặc thông tin mô tả sản phẩm tại thời điểm đặt hàng để mình kiểm tra chính xác hơn. Hiện tại mình chưa gửi yêu cầu hoàn tiền vì chưa đủ thông tin để xác minh.
+### 3.2. KB9 — Mô tả thay đổi sau thời điểm đặt hàng
 
-### Người dùng nhìn thấy gì?
+**Câu sai giả định cần ngăn:** “Trang sản phẩm ghi 5 lít nên shop giao đúng, khiếu nại của bạn bị từ chối.”
 
-- AI thông báo rõ thông tin nào còn thiếu.
-- Người mua biết cần cung cấp đơn hàng, mô tả vấn đề hoặc bằng chứng gì.
-- Chưa có yêu cầu hoàn tiền nào được gửi đi.
-- Người mua không bị hiểu nhầm rằng yêu cầu đã được xử lý thành công.
+**Câu đúng hiện có trong `cases.history.reply`:**
 
-### Các bước tiếp theo
+> Mình chưa thể kết luận dựa trên mô tả đang hiển thị. Việc xác minh cần dùng phiên bản mô tả tại thời điểm bạn đặt hàng. Hệ thống mô phỏng hiện có bản ghi lịch sử, nhưng cần nhân viên đối chiếu trước khi kết luận.
 
-1. AI xác định đơn hàng mà người mua đang đề cập.
-2. AI hỏi rõ điểm khác biệt giữa sản phẩm nhận được và mô tả khi đặt hàng.
-3. AI tiếp nhận và kiểm tra bằng chứng người mua cung cấp.
-4. AI tóm tắt thông tin đã xác minh để người mua kiểm tra lại.
-5. Khi có đủ căn cứ, AI mới hướng dẫn người mua tạo yêu cầu trả hàng hoàn tiền.
-6. Nếu không thể xác định đơn hàng hoặc vấn đề vẫn chưa rõ, AI chuyển trường hợp cho nhân viên hỗ trợ.
+- **Người dùng thấy:** Mã đơn mock `#SPX-7712`, snapshot mock ghi 6 lít, ghi chú cần xác minh tính toàn vẹn và nút “Chuyển chuyên viên đối chiếu lịch sử” (Ảnh 2).
+- **Làm tiếp theo thiết kế:** Giữ riêng lời người mua, mô tả hiện tại và snapshot theo thời điểm. Chuyển chuyên viên kiểm tra nguồn/thời điểm snapshot cùng ảnh sản phẩm và phản hồi người bán. Thiếu snapshot thì ghi “không có dữ liệu lịch sử”, không tạo lại lịch sử bằng suy đoán.
+- **Ai được báo, khi nào:** Người mua được báo giới hạn ngay trong lượt trả lời. Chuyên viên nhận hồ sơ khi chuyển thành công; người bán được yêu cầu phản hồi khi chuyên viên cần bằng chứng. Thời hạn xử lý lấy từ cấu hình hàng đợi thực tế; nếu chưa có thì báo đang chờ, không hứa 24/48 giờ. Prototype không có hàng đợi hay thông báo ngoài màn hình.
+- **Quyết định:** **Trả lời kèm giới hạn rồi chuyển người trước khi phán quyết.** Loại chỉ hỏi thêm ảnh vì ảnh không xác minh được lịch sử mô tả. Loại trả lời kèm giới hạn rồi tiếp tục tự quyết vì nguồn chưa được xác minh. Không im lặng chuyển người: cần giải thích lý do và hồ sơ được mang theo.
+- **Loại lỗi:** Lỗi hệ thống nếu không lưu/truy xuất được snapshot; lỗi ngữ cảnh nếu nhầm mô tả hiện tại với mô tả lúc đặt. Cách nói nêu dữ liệu thiếu, không quy kết shop đã gian lận chỉ từ lời phản ánh.
+- **HAX/PAIR áp dụng:** Minh bạch giới hạn → “chưa thể kết luận”; giải thích căn cứ → khung snapshot 6 lít và phần cần xác minh; khả năng kiểm soát → nút chuyển chuyên viên. Xem các chú thích 1–3 trong Ảnh 2.
+- **Câu chữ không cứu được:** Cần snapshot gắn với đúng đơn/thời điểm, kiểm tra tính toàn vẹn, nhật ký xét duyệt và quyền phán quyết phía máy chủ. Nếu chưa có dữ liệu thì giữ hồ sơ chờ xác minh. Prototype chưa có các cơ chế này.
 
-### Ai được thông báo?
+## §4. Mức tự chủ (chặng 4)
 
-- **Người mua:** Được thông báo về thông tin còn thiếu và bước cần thực hiện.
-- **Người bán:** Chỉ được thông báo khi vụ việc đã được xác định và cần phản hồi theo quy trình.
-- **Nhân viên hỗ trợ:** Được chuyển trường hợp khi AI không thể xác minh hoặc xử lý an toàn.
+### 4.1. Quyền của từng tool
 
-AI không tự cam kết thời gian xử lý nếu chưa có SLA chính thức từ hệ thống.
+`soan_hoan_tien` là tên kế thừa từ spec cũ, chưa có schema tool để xác nhận nó chỉ soạn hay thực sự thực thi. Bài tách rõ **soạn bản nháp** và **duyệt/thực hiện hoàn tiền**. Prototype dùng nhãn `soan_de_xuat_hoan_tien` ở mức “Cần duyệt”; hiểu là kết quả đề xuất phải được duyệt, không phải bản nháp đã làm tiền dịch chuyển.
 
-### Vì sao chọn hỏi lại?
+| Tool / bước | Mức đề xuất | Cost-of-error và chi phí chờ | Phương án đã cân nhắc và loại |
+|---|---|---|---|
+| `yeu_cau_bang_chung` | **Tự làm có giới hạn**: chỉ xin thông tin liên quan, chưa có; không xin dữ liệu riêng tư không cần thiết. | Xin sai làm người mua/người bán mất công, có thể lộ dữ liệu hoặc lỡ thời hạn; đính chính không xóa hết hậu quả. Duyệt mọi câu hỏi làm chậm thu thập thông tin. | Loại duyệt từng yêu cầu vì quá nhiều bước chờ; dùng danh mục bằng chứng và đường chuyển người cho ca nhạy cảm/bế tắc. |
+| `chuyen_truong_nhom` | **Tự làm** khi vượt khả năng hoặc người dùng yêu cầu; kiểm tra đúng nơi nhận. | Chuyển nhầm tăng tải, trì hoãn và có thể chia sẻ hồ sơ sai người; có thể phân tuyến lại nhưng không thu hồi được thời gian đã mất. | Loại yêu cầu duyệt trước khi chuyển vì kéo dài chính bước cần tìm người hỗ trợ; giới hạn dữ liệu người nhận được xem. |
+| `soan_hoan_tien` / `soan_de_xuat_hoan_tien` | **Cần người duyệt đối với quyết định cuối**. AI chỉ soạn nháp khi đủ trường, người mua được sửa; không gọi giao dịch tiền. | Sai đơn, số tiền hoặc căn cứ gây thiệt hại hai bên; nháp có thể sửa, giao dịch khó đảo lại. Chờ duyệt kéo dài nhận tiền nhưng cần để kiểm tra quyền lợi. | Loại tự hoàn theo số ảnh hoặc giá trị đơn nhỏ vì bằng chứng có thể sai; loại cấm cả soạn nháp vì làm nhân viên phải nhập lại hồ sơ. |
+| `tu_choi_khieu_nai` | **Cần người duyệt**; không đóng hồ sơ chỉ vì thiếu ảnh hoặc hết thời gian chờ. | Từ chối sai làm người mua mất cơ hội xử lý và tốn công khiếu nại lại; người bán phải chờ lâu hơn nếu hồ sơ chưa quyết định. | Loại tự từ chối khi hết hạn vì có thể lỗi tải ảnh; loại cấm hoàn toàn vì chuyên viên vẫn cần xử lý hồ sơ không có căn cứ. |
+| `phat_shop` | **Cấm trong trợ lý này**; chỉ chuyển chuyên trách. | Phạt sai ảnh hưởng uy tín và hoạt động kinh doanh, khó phục hồi hoàn toàn; chuyển bộ phận khác làm chậm nhưng phù hợp phạm vi. | Loại cả tự làm và duyệt trong chat vì chế tài shop nằm ngoài lát cắt §1. |
 
-- **Không chọn trả lời kèm giới hạn:** Vì AI chưa biết đơn hàng nào và vấn đề cụ thể là gì.
-- **Không chuyển nhân viên ngay:** Vì đây có thể chỉ là trường hợp thiếu thông tin, người mua có thể bổ sung nhanh chóng.
-- **Không gọi `soan_hoan_tien`:** Vì chưa có đủ căn cứ để tạo yêu cầu hoàn tiền.
+**Quy trình duyệt đề xuất:**
 
-### Phân loại nguyên nhân AI có thể sai
+- **Ai duyệt:** Chuyên viên khiếu nại được phân quyền. Phản hồi đồng ý của người bán là một bằng chứng, không mặc nhiên thay thế quyền duyệt của chuyên viên.
+- **Người duyệt thấy:** Mã đơn và chủ đơn; số tiền nếu đã có nguồn; mô tả lúc đặt cùng nguồn/thời điểm; mô tả hiện tại tách riêng; bằng chứng của hai bên; phần chưa xác minh; lý do đề xuất; lịch sử chỉnh sửa. Thiếu giá trị đơn thì không tự điền số tiền hay hứa hoàn 100%.
+- **Quá hạn:** Hạn duyệt phải lấy từ cấu hình vận hành được phê duyệt. Khi quá hạn, cảnh báo trưởng nhóm và cập nhật trạng thái cho người mua; không tự duyệt, tự từ chối hoặc tự đóng. Nếu chưa cấu hình hạn, hiển thị “Chưa có thời gian xử lý xác nhận” và cho yêu cầu hỗ trợ; đây là việc cần hoàn thiện trước triển khai.
+- Prototype chỉ có nút “Nhân viên duyệt (mô phỏng)”, chưa có xác thực vai trò, hồ sơ thật hay bộ đếm quá hạn.
 
-- **Lỗi ngữ cảnh:** Tin nhắn quá ngắn, thiếu thông tin về đơn hàng và vấn đề.
-- **Lỗi hệ thống:** Nếu hệ thống cho phép AI gọi tool hoàn tiền ngay cả khi chưa đủ dữ liệu đầu vào.
+### 4.2. Tool khó xếp nhất
 
-### Nguyên tắc HAX/PAIR được áp dụng
+**Chọn `soan_hoan_tien`**, vì tên gọi dễ nhập nhằng giữa chuẩn bị đề xuất và chuyển tiền.
 
-- **HAX G10 – Thu hẹp hành động khi có sự không chắc chắn:** AI phải hỏi lại thay vì tự suy đoán và thực hiện hành động có ảnh hưởng đến quyền lợi.
-- **HAX G2 – Làm rõ khả năng của AI:** AI cần nói rõ mình chưa đủ thông tin để xác minh, tránh tạo cảm giác rằng vấn đề đã được xử lý.
-- **PAIR – Feedback & Control:** Người mua được bổ sung thông tin và kiểm soát bước tiếp theo trước khi hệ thống thực hiện hành động.
+| Phương án cân nhắc | Lợi ích | Cái giá liên hệ §2 |
+|---|---|---|
+| Tự làm toàn bộ | Ít bước chờ | KB2 có thể sai đơn; KB9 có thể sai căn cứ lịch sử, kéo theo quyết định tài chính sai. |
+| Người duyệt từ lúc soạn hồ sơ | Kiểm tra sớm | KB1 cũng phải chờ nhân viên nhập lại dữ liệu; tăng việc thủ công. |
+| AI soạn nháp có điều kiện, chuyên viên duyệt quyết định | Giảm nhập liệu, giữ kiểm soát quyết định | Vẫn cần hàng đợi và người duyệt kiểm tra thực chất, không chỉ bấm xác nhận. |
 
-### Vì sao sửa câu chữ chưa đủ?
+**Phương án chốt trong tài liệu:** Phương án thứ ba. Không coi duyệt thủ công là bảo đảm an toàn tuyệt đối; người duyệt có thể sai nếu hồ sơ trình bày thiếu nguồn.
 
-Nếu chỉ sửa câu trả lời của AI thành “Bạn vui lòng cung cấp thêm thông tin”, hệ thống vẫn có thể gọi tool hoàn tiền ở phía sau.
+**Ý kiến từng thành viên:** Chưa có biên bản hoặc thông tin phân công để gán lựa chọn cho từng người. Bảng trên là phân tích phương án, không phải tường thuật một cuộc tranh luận đã diễn ra. Cần nhóm xác nhận phần này trước khi nộp.
 
-Do đó, cần có cơ chế kiểm soát ở cấp hệ thống:
+### 4.3. Thử mức tự chủ trên ba kịch bản
 
-- Không cho phép gọi `soan_hoan_tien` khi chưa xác định được đơn hàng.
-- Kiểm tra các trường thông tin bắt buộc trước khi thực hiện hành động.
-- Yêu cầu AI hỏi lại nếu thiếu dữ liệu.
-- Ghi nhận trạng thái bằng chứng đã nhận để tránh hỏi người mua lặp lại.
+Kết quả dưới đây là **đối chiếu luồng mã nguồn**, không phải thử nghiệm backend hay AI thật.
 
----
+| Ca | Theo thiết kế: sai bị chặn thế nào? | Prototype hiện tại | Có chờ vô ích hoặc làm trước khi hỏi? |
+|---|---|---|---|
+| KB2 | Thiếu đơn/điểm sai thì chỉ hỏi; không tạo nháp. | Màn đầu hỏi đúng. Nhưng `addProof()` chỉ bật cờ, sau đó `makeDraft()` vẫn tạo nháp mà không kiểm tra thông tin. **Chưa đạt chặn đầu vào.** | Không phải chờ nhân viên để được hỏi, nhưng có thể soạn nháp trước khi thật sự nhận thông tin. |
+| KB9 | Nguồn lịch sử chưa xác minh thì chuyển người; không duyệt quyết định. | Có nút chuyển đúng. Tuy nhiên “Bổ sung ảnh sản phẩm” → tạo nháp → duyệt mock vẫn đi được, chưa buộc xác minh snapshot. **Chưa đạt chặn luồng thay thế.** | Chờ chuyên viên là có lý do; chưa đo thời gian chờ. Không được coi thêm ảnh là thay thế xác minh lịch sử. |
+| KB1 bình thường | Thu thập ảnh tem và ảnh chat, người mua kiểm tra nháp, chuyên viên duyệt. | Có chuỗi xác nhận ảnh → tạo nháp → sửa/duyệt mock. Không tải tệp, kiểm tra ảnh hoặc tạo mã trả hàng thật. | Không phải chờ để xem hướng dẫn; bước duyệt cuối vẫn cần người. Chưa có dữ liệu để nói luồng nhanh hơn bao nhiêu. |
 
-## 3.2. Kịch bản đắt nhất #9: Người bán đã sửa mô tả sản phẩm sau khi người mua đặt hàng
+### 4.4. Luật bổ sung và lời hứa
 
-### Tình huống
+- Tách trạng thái **đang thu thập → đủ đầu vào soạn nháp → chờ chuyên viên → có quyết định**; “đã nhận ảnh” không đồng nghĩa “ảnh đã xác minh”.
+- Chặn hành động tại hệ thống thực thi: đúng đơn, quyền truy cập, trường bắt buộc, trạng thái nguồn và quyền người duyệt. Thêm nhật ký, chống xử lý lặp khi tích hợp giao dịch thật.
+- Không tự tính tiền hoàn, tạo mã trả hàng miễn phí hay cam kết bảo toàn lịch sử nếu chưa có dữ liệu/công cụ tương ứng.
+- **Lời hứa bị loại:** “AI giải quyết tranh chấp và hoàn tiền tức thì.”
+- **Lời hứa được chọn:** “AI hỗ trợ thu thập thông tin, nêu rõ dữ liệu còn thiếu và chuẩn bị hồ sơ; chuyên viên có thẩm quyền quyết định hoàn tiền hoặc từ chối.” Việc giới hạn tự chủ đổi kỳ vọng từ nhận tiền ngay sang biết đúng bước tiếp theo.
 
-Người mua phản ánh sản phẩm nhận được không đúng mô tả và cho biết người bán đã sửa nội dung mô tả sau khi đơn hàng được đặt.
-
-AI có thể mắc lỗi khi chỉ đối chiếu sản phẩm thực tế với mô tả hiện tại trên Shopee. Nếu mô tả đã bị thay đổi, AI có thể kết luận sai rằng người bán không vi phạm, dù sản phẩm tại thời điểm đặt hàng thực sự không đúng mô tả.
-
-### Cách xử lý đề xuất
-
-**Phương án được chọn: Trả lời kèm giới hạn (Answer with limits).**
-
-AI cần giải thích rõ rằng việc xác minh phải dựa trên mô tả sản phẩm tại thời điểm người mua đặt hàng, không phải nội dung hiện tại.
-
-**Câu trả lời mẫu của AI:**
-
-> Mình sẽ kiểm tra thông tin mô tả sản phẩm tại thời điểm bạn đặt hàng để đối chiếu với sản phẩm đã nhận.
->
-> Nội dung mô tả hiện tại có thể đã thay đổi, vì vậy mình chưa thể kết luận chỉ dựa trên thông tin đang hiển thị.
->
-> Mình sẽ kiểm tra lịch sử thông tin sản phẩm và các bằng chứng liên quan. Nếu hệ thống không có dữ liệu lịch sử hoặc chưa đủ căn cứ xác minh, mình sẽ chuyển trường hợp này đến nhân viên hỗ trợ để kiểm tra thêm.
-
-### Người dùng nhìn thấy gì?
-
-- AI giải thích rõ thông tin nào sẽ được dùng để xác minh.
-- Người mua biết rằng mô tả hiện tại không phải căn cứ duy nhất để kết luận.
-- Người mua được thông báo nếu hệ thống không truy xuất được lịch sử mô tả.
-- AI không vội kết luận người mua hoặc người bán đúng khi chưa đủ bằng chứng.
-
-### Các bước tiếp theo
-
-1. AI xác định sản phẩm và đơn hàng đang bị khiếu nại.
-2. Hệ thống truy xuất mô tả sản phẩm tại thời điểm người mua đặt hàng.
-3. AI đối chiếu mô tả lịch sử với sản phẩm thực tế và bằng chứng của hai bên.
-4. AI tóm tắt những điểm đã xác minh và những thông tin còn thiếu.
-5. Nếu dữ liệu lịch sử đầy đủ, AI hướng dẫn bước xử lý tiếp theo theo quy trình.
-6. Nếu không có lịch sử mô tả hoặc không đủ căn cứ, AI chuyển trường hợp cho nhân viên hỗ trợ.
-
-### Ai được thông báo?
-
-- **Người mua:** Được thông báo về quá trình xác minh và kết quả kiểm tra.
-- **Người bán:** Được thông báo khi cần cung cấp thông tin hoặc phản hồi về nội dung khiếu nại.
-- **Nhân viên hỗ trợ:** Nhận trường hợp khi dữ liệu lịch sử không có hoặc không đủ để đưa ra kết luận.
-
-Thời gian xử lý cần tuân theo SLA thực tế của Shopee. AI không tự đưa ra thời hạn khi chưa có thông tin chính thức.
-
-### Vì sao chọn trả lời kèm giới hạn?
-
-- **Không tự động kết luận:** Vì mô tả hiện tại có thể khác mô tả tại thời điểm đặt hàng.
-- **Không chỉ yêu cầu người mua gửi thêm ảnh:** Vì ảnh sản phẩm không thể thay thế dữ liệu lịch sử mô tả.
-- **Không tự động hoàn tiền hoặc bác khiếu nại:** Vì cần đối chiếu thông tin lịch sử trước khi đưa ra kết luận.
-- **Chuyển nhân viên khi cần thiết:** Nếu hệ thống không có dữ liệu lịch sử hoặc không thể xác minh đáng tin cậy.
-
-### Phân loại nguyên nhân AI có thể sai
-
-- **Lỗi hệ thống:** Không lưu hoặc không truy xuất được lịch sử mô tả sản phẩm theo thời điểm.
-- **Lỗi ngữ cảnh:** AI không phân biệt mô tả hiện tại với mô tả tại thời điểm đặt hàng.
-
-### Nguyên tắc HAX/PAIR được áp dụng
-
-- **HAX G2 – Làm rõ khả năng của AI:** AI phải nói rõ dữ liệu nào có thể và chưa thể kiểm tra.
-- **HAX G11 – Giải thích căn cứ:** AI cần cho người mua biết kết luận dựa trên dữ liệu lịch sử nào, thay vì chỉ đưa ra kết quả.
-- **PAIR – Explainability:** Quá trình đối chiếu và căn cứ xác minh cần được trình bày minh bạch để người mua và người bán hiểu vì sao có kết quả đó.
-
-### Vì sao sửa câu chữ chưa đủ?
-
-Nếu chỉ yêu cầu AI nói “Tôi sẽ kiểm tra mô tả lúc đặt hàng”, nhưng hệ thống không lưu hoặc không truy xuất được dữ liệu lịch sử, AI vẫn có thể đưa ra kết luận sai.
-
-Do đó, cần thay đổi ở cấp hệ thống:
-
-- Lưu phiên bản mô tả sản phẩm tại thời điểm phát sinh đơn hàng.
-- Cho phép truy xuất lịch sử chỉnh sửa mô tả.
-- Ghi nhận thời điểm thay đổi nội dung sản phẩm.
-- Không cho phép AI kết luận tự động nếu thiếu dữ liệu lịch sử cần thiết.
-- Chuyển nhân viên hỗ trợ khi không thể xác minh bằng dữ liệu đáng tin cậy.
-
----
-
-## §4. Mức tự chủ  (chặng 4)
-
-### 4.1. Phân mức tự chủ cho từng Tool & Lập luận Cost-of-Error
-
-Dựa trên nguyên tắc không tự ý phán quyết và không tự động hoàn tiền/xử phạt đã chốt ở §1, nhóm phân định mức tự chủ cho 5 tool như sau:
-
-#### 1. `yeu_cau_bang_chung` (Gửi mẫu xin bằng chứng cho người mua hoặc người bán)
-- **Mức tự chủ của nhóm:** **Tự làm (Autonomous)**.
-- **Lý do theo Cost-of-Error:**
-  - *Sai thì ai chịu gì, đảo lại được không:* Nếu AI gửi nhầm mẫu yêu cầu bằng chứng (hoặc gửi thừa), người nhận chỉ mất công đọc hoặc bỏ qua; hệ thống có thể đảo ngược dễ dàng bằng cách gửi tin nhắn đính chính hoặc cập nhật form bổ sung mà không gây thiệt hại tài chính.
-  - *Chờ người thì mất gì:* Nếu bắt nhân viên duyệt từng tin nhắn yêu cầu gửi ảnh/video, thời gian phản hồi sẽ bị kéo dài nhiều giờ. Người mua đang nóng lòng sẽ cảm thấy bị bỏ rơi, trong khi thời hạn khiếu nại (SLA) của đơn hàng tiếp tục trôi qua.
-- **Phương án đã cân nhắc & vì sao loại:** Cân nhắc mức "Cần người duyệt" cho các đơn giá trị cao hoặc các yêu cầu mơ hồ. Loại vì việc thu thập chứng cứ ban đầu ít rủi ro; giữ luồng tự động giúp hồ sơ sẵn sàng sớm nhất cho nhân viên thẩm định.
-
-#### 2. `chuyen_truong_nhom` (Chuyển hồ sơ cho trưởng nhóm / chuyên viên hỗ trợ)
-- **Mức tự chủ của nhóm:** **Tự làm (Autonomous)**.
-- **Lý do theo Cost-of-Error:**
-  - *Sai thì ai chịu gì, đảo lại được không:* Chuyển nhầm hồ sơ chỉ làm tăng tải nhẹ cho nhân viên tiếp nhận; nhân viên hoàn toàn đảo ngược được bằng cách bấm chuyển trả lại cho bot xử lý tự động tiếp. Không có rủi ro mất tiền hay mất hàng.
-  - *Chờ người thì mất gì:* Khi AI phát hiện ca vượt thẩm quyền (như KB 7 nghi hàng giả, KB 6 đe dọa bóc phốt, hoặc KB 9 thiếu dữ liệu lịch sử mô tả). Nếu tool này phải chờ duyệt thì hệ thống sẽ bị tắc nghẽn, triệt tiêu khả năng cứu vãn rủi ro kịp thời.
-- **Phương án đã cân nhắc & vì sao loại:** Cân nhắc mức "Cần người duyệt". Loại vì mâu thuẫn logic: không thể bắt người duyệt một hành động mà mục đích của nó là đi gọi người hỗ trợ.
-
-#### 3. `soan_hoan_tien` (Hoàn tiền cho người mua)
-- **Mức tự chủ của nhóm:** **Cần người duyệt (Human-in-the-loop) — Tách bước**.
-- **Quy định khi cần người duyệt:**
-  - *Ai duyệt:* Nhân viên xử lý khiếu nại của sàn Shopee (hoặc Người bán xác nhận đồng ý hoàn tiền).
-  - *Người duyệt thấy gì:* Tóm tắt hồ sơ đối chiếu (Snapshot mô tả lúc đặt vs Bằng chứng khách gửi), lịch sử chat giữa 2 bên, và trạng thái xác nhận từ đơn vị vận chuyển (đã nhận hàng hoàn trả hay chưa).
-  - *Quá hạn thì sao:* Quá thời hạn quy định (24h kể từ khi đủ bằng chứng hoặc người bán không phản hồi đúng hạn), hệ thống tự động đẩy cảnh báo lên trưởng nhóm trực để quyết định.
-- **Lý do theo Cost-of-Error:**
-  - *Sai thì ai chịu gì, đảo lại được không:* **Rất khó đảo ngược**. Khi tiền đã hoàn vào Ví ShopeePay/tài khoản của người mua, sàn không thể tự ý thu hồi. Nếu hoàn sai (như trường hợp KB 2, hoặc khách gian lận tráo hàng), người bán mất trắng cả tiền lẫn hàng, sàn gánh chịu khiếu kiện bồi thường.
-  - *Chờ người thì mất gì:* Người mua phải chờ thêm thời gian thẩm định (12–24h), nhưng đổi lại sự công bằng tuyệt đối cho người bán và tính toàn vẹn tài chính cho sàn.
-- **Phương án đã cân nhắc & vì sao loại:** Cân nhắc mức "Tự làm" cho các đơn hàng giá trị nhỏ (< 50.000 VNĐ). Nhóm quyết định loại vì sẽ tạo lỗ hổng gian lận có hệ thống bòn rút ngân sách sàn.
-
-#### 4. `tu_choi_khieu_nai` (Đóng khiếu nại, tiền về người bán)
-- **Mức tự chủ của nhóm:** **Cần người duyệt (Human-in-the-loop)**.
-- **Quy định khi cần người duyệt:**
-  - *Ai duyệt:* Chuyên viên khiếu nại Shopee.
-  - *Người duyệt thấy gì:* Bằng chứng đối soát chứng minh người bán đã giao đúng mô tả lúc đặt (tem niêm phong, video đóng hàng, hóa đơn chính hãng) hoặc biên bản xác nhận người mua không cung cấp bằng chứng sau thời hạn gia hạn.
-  - *Quá hạn thì sao:* Sau 48h nếu chưa duyệt từ chối, vụ việc được chuyển lên Trưởng nhóm để tránh đóng đơn treo.
-- **Lý do theo Cost-of-Error:**
-  - *Sai thì ai chịu gì, đảo lại được không:* **Rất khó đảo ngược**. Khi từ chối khiếu nại, hệ thống sẽ giải phóng tiền thanh toán cho người bán. Nếu AI từ chối sai (đặc biệt ở KB 9 khi shop lén sửa mô tả sau bán), người mua bị ép nhận hàng lỗi/hàng rác, niềm tin vào Shopee sụp đổ hoàn toàn.
-  - *Chờ người thì mất gì:* Người bán phải chờ giải phóng tiền thêm 24h, nhưng đảm bảo không có quyết định oan sai cho khách.
-- **Phương án đã cân nhắc & vì sao loại:** Cân nhắc mức "Tự làm" khi hết hạn gửi ảnh. Loại vì AI không thể đánh giá được các trường hợp bất khả kháng của khách (như app lỗi không upload được ảnh); cần con người thẩm định lần cuối trước khi đóng vĩnh viễn quyền lợi khiếu nại.
-
-#### 5. `phat_shop` (Trừ điểm uy tín, khoá shop)
-- **Mức tự chủ của nhóm:** **CẤM (Forbidden)**.
-- **Lý do theo Cost-of-Error:**
-  - *Sai thì ai chịu gì, đảo lại được không:* Khóa shop hoặc phạt điểm sao quả tạ sẽ làm giảm uy tín thương hiệu và công việc kinh doanh của cả một cửa hàng; khó khôi phục lại niềm tin và khách quen của shop.
-  - *Nguy cơ:* Nếu AI có quyền này, kẻ xấu sẽ dùng các kịch bản đe dọa (như KB 6, KB 7) hoặc đánh giá bẩn có tổ chức để ép AI phạt đối thủ cạnh tranh.
-- **Phương án đã cân nhắc & vì sao loại:** Cân nhắc "Cần người duyệt". Loại vì đã quy định dứt khoát tại §1 (Ba việc tính năng KHÔNG làm): Trợ lý chat trong luồng khiếu nại đơn lẻ không được tích hợp công cụ chế tài shop; việc xử phạt phải đi qua hệ thống Kiểm soát Tuân thủ & Gian lận độc lập của sàn.
-
----
-
-### 4.2. Tool khó xếp nhất & Cách nhóm chốt
-
-- **Tool khó xếp nhất:** `soan_hoan_tien`.
-- **Quan điểm tranh luận giữa các thành viên:**
-  - *Thành viên ủng hộ "Tự làm":* Cho rằng người dùng kỳ vọng trải nghiệm "Hoàn tiền tức thì" (Instant Refund) khi có bằng chứng rõ ràng. Chờ đợi sẽ làm tăng tỷ lệ gọi hotline phàn nàn.
-  - *Thành viên ủng hộ "Cần người duyệt":* Dẫn chứng trực tiếp từ **KB 2 ("hàng sai rồi, xử lý đi")** và **KB 9 ("shop sửa mô tả")**: AI chỉ cần hiểu sai ngữ cảnh một lần là tiền bay khỏi hệ thống, người bán bị mất tiền oan không đòi lại được, vi phạm tính trung lập của sàn.
-- **Cái giá của mỗi phía:**
-  - Cho AI tự làm: Tốc độ tối đa, nhưng cái giá là rủi ro mất tiền và gian lận bùng phát (Cost-of-Error cực lớn).
-  - Bắt người duyệt hoàn toàn: An toàn 100%, nhưng tốn chi phí nhân sự và giảm độ hài lòng của khách.
-- **Cách nhóm chốt — Tách tool thành 2 bước (Thiết kế cứu nghiệp vụ):**
-  - **Bước 1 (AI tự làm):** `soan_de_xuat_hoan_tien` — AI tự động trích xuất thông tin đơn, tính toán số tiền hoàn dựa trên giá trị lúc mua, đính kèm ảnh bằng chứng thành một bản nháp đề xuất (draft proposal).
-  - **Bước 2 (Người duyệt):** Chuyên viên khiếu nại (hoặc Người bán) chỉ cần kiểm tra nhanh bản nháp và bấm nút **"Xác nhận phê duyệt hoàn tiền"**.
-  - Nhờ tách bước, AI vẫn giải phóng 80% thời gian soạn hồ sơ thủ công cho con người, trong khi quyền chốt dòng tiền vẫn nằm chắc trong tay con người.
-
----
-
-### 4.3. Thử nghiệm bộ mức tự chủ trên 3 kịch bản
-
-#### 1. Thử trên Kịch bản đắt nhất #2: *"Hàng sai rồi, xử lý đi"* (KB 2 ở §2 & §3.1)
-- **Cái sai có bị chặn không?** **Bị chặn hoàn toàn.** Do `soan_hoan_tien` ở mức "Cần người duyệt" và có điều kiện tiên quyết là phải có mã đơn và bằng chứng, AI không thể tự động bấm hoàn tiền khi tin nhắn chỉ có 6 chữ cụt lủn.
-- **Có việc nào AI làm khi lẽ ra phải hỏi không?** **Không.** AI chỉ có quyền thực hiện `yeu_cau_bang_chung` (hỏi lại mã đơn và điểm sai), hoàn toàn đúng theo thiết kế tại §3.1.
-- **Người dùng bình thường có bị chờ vô ích không?** **Không.** AI trả lời hỏi lại ngay lập tức, không làm chậm trễ luồng xử lý.
-
-#### 2. Thử trên Kịch bản đắt nhất #9: *"Shop đã sửa mô tả sau khi bán"* (KB 9 ở §2 & §3.2)
-- **Cái sai có bị chặn không?** **Bị chặn hoàn toàn.** Do `tu_choi_khieu_nai` ở mức "Cần người duyệt", AI bị tước quyền tự đóng khiếu nại. Khi phát hiện dữ liệu mô tả hiện tại bị lệch hoặc không thể truy xuất lịch sử, AI tự động kích hoạt `chuyen_truong_nhom`.
-- **Có việc nào AI làm khi lẽ ra phải hỏi không?** **Không.** AI trả lời kèm giới hạn, minh bạch căn cứ và chuyển chuyên viên thẩm định Snapshot đơn hàng.
-- **Người dùng bình thường có bị chờ vô ích không?** **Không.** Thời gian chuyển tiếp được thông báo rõ ràng, người mua được giải thích lý do vì sao cần đối chiếu lịch sử thay vì bị từ chối oan.
-
-#### 3. Thử trên 1 Kịch bản bình thường: Kịch bản 1 (*"Mình đặt áo size L mà nhận size M, shop nhắn nhận gửi nhầm..."*)
-- **Cách AI vận hành với bộ mức tự chủ:**
-  - AI tự làm (`yeu_cau_bang_chung`): Mở form cho khách đính kèm ảnh chụp tin nhắn shop đã nhận sai và ảnh tem mác size M.
-  - AI tự làm (`soan_de_xuat_hoan_tien`): Tạo bản nháp hoàn tiền 100% kèm mã trả hàng miễn phí.
-  - Khi bưu tá quét mã nhận hàng hoàn thành công, chuyên viên chỉ cần 1 thao tác click duyệt để giải ngân tiền cho khách.
-- **Đánh giá 3 câu hỏi kiểm chứng:**
-  - *Cái sai có bị chặn?* Có, tiền chỉ giải ngân khi có bằng chứng shop thừa nhận và hàng đã gửi trả.
-  - *Còn làm khi lẽ ra phải hỏi?* Không, AI đã hỏi đúng ảnh chụp tin nhắn xác nhận của shop.
-  - *Người dùng bình thường có phải chờ vô ích không?* **Không.** Khách nhận mã gửi hàng ngay lập tức từ AI mà không phải chờ nhân viên vào chat thủ công.
-
----
-
-### 4.4. Đổi lời hứa với người dùng
-
-- **Lời hứa cũ (thiếu mức tự chủ):** *"Shopee AI tự động giải quyết tranh chấp và hoàn tiền tức thì cho bạn."*
-  *(Hậu quả: Tạo kỳ vọng ảo khiến khách nghĩ chỉ cần nhắn vài chữ là tiền về; đồng thời khiến người bán hoang mang vì sợ bị bot tước đoạt tiền oan).*
-- **Lời hứa mới (sau khi đặt mức tự chủ):** *"Shopee AI hỗ trợ bạn thu thập chứng cứ, bảo toàn nguyên vẹn lịch sử đơn hàng và chuẩn bị hồ sơ minh bạch để chuyên viên xử lý công bằng nhất cho cả hai bên."*
-  *(Giá trị mang lại: Khách hàng hiểu rõ vai trò trợ lý thu thập bằng chứng của AI; cả Người mua và Người bán đều an tâm vì phán quyết cuối cùng luôn có sự thẩm định và bảo hộ của con người).*
-
-## §5. Prototype  (chặng 5)
 ## §5. Prototype (chặng 5)
 
-### 5.1. Link và công cụ thực hiện
+### 5.1. File, công cụ và phạm vi mô phỏng
 
-- **File prototype:** `prototype/index.html`
-- **Công cụ:** HTML, CSS và JavaScript thuần.
-- **Hình thức:** Giao diện web mô phỏng khung trò chuyện với Shopee.
-- **AI thật:** Không có lời gọi AI thật. Nội dung phản hồi được dựng sẵn theo từng kịch bản để kiểm tra luồng quyết định và mức tự chủ.
-- **Dữ liệu:** Dữ liệu đơn hàng, mô tả sản phẩm, bằng chứng và trạng thái xử lý đều là dữ liệu mô phỏng.
-- **Phạm vi mock:** Việc truy xuất lịch sử mô tả, gửi bằng chứng, tạo bản nháp hoàn tiền, nhân viên duyệt và chuyển chuyên viên đều được mô phỏng bằng JavaScript. Không có giao dịch hoàn tiền thật và không kết nối hệ thống Shopee.
+- **File:** [propotype/index.html](propotype/index.html) — giữ đúng tên thư mục hiện tại là `propotype`.
+- **Công cụ:** HTML, CSS, JavaScript thuần; mở file bằng trình duyệt, chọn ba tab tình huống.
+- **Không gọi AI thật:** Hội thoại và dữ liệu nằm cố định trong đối tượng `cases`; không có kết nối Shopee, thanh toán hoặc truy xuất lịch sử thật.
+- **Mock:** Đơn hàng, snapshot, nhận bằng chứng, tạo nháp, duyệt và chuyển nhân viên. Các nút chủ yếu đổi cờ trạng thái rồi gọi `render()`; không thực sự tải ảnh hay gửi hồ sơ ra ngoài.
 
-### 5.2. Các màn hình và nguyên tắc HAX/PAIR
+### 5.2. Hai ảnh và các điểm đánh số
 
-**Ảnh 1 – Kịch bản người mua báo hàng sai nhưng thiếu thông tin**
+**Ảnh 1 — KB2: thiếu thông tin**
 
-- Thể hiện: AI hỏi lại mã đơn hàng và điểm sai lệch thay vì tự tạo yêu cầu hoàn tiền.
-- HAX G10: Thu hẹp hành động khi chưa chắc chắn. AI chỉ hỏi thông tin còn thiếu.
-- HAX G2: Làm rõ giới hạn của AI bằng cách thông báo chưa đủ dữ liệu để xác minh.
-- PAIR Feedback & Control: Người mua chủ động cung cấp thông tin trước khi hệ thống chuyển sang bước tiếp theo.
-- Mức tự chủ: `yeu_cau_bang_chung` tự làm; `soan_de_xuat_hoan_tien` cần người duyệt.
+![Ảnh 1 — Ca thiếu thông tin và các chú thích 1–3](prototype/prototype-01.png)
 
-**Ảnh 2 – Kịch bản người bán sửa mô tả sau khi bán**
+| Số trong khung chú thích | Thể hiện gì | Nguyên tắc | Mức tự chủ liên quan |
+|---|---|---|---|
+| 1 | AI hỏi đơn hàng và chỗ sai, trạng thái chưa tạo yêu cầu. | Thu hẹp hành động khi không chắc chắn. | Tự hỏi bằng chứng; chưa được soạn đề xuất khi thiếu đầu vào. |
+| 2 | Nêu thiếu dữ liệu và giới hạn hỗ trợ. | Làm rõ khả năng/giới hạn. | Không tự hoàn hoặc đóng khiếu nại. |
+| 3 | Nút bổ sung và chuyển nhân viên. | PAIR: phản hồi và kiểm soát. | Người mua cung cấp thông tin hoặc yêu cầu chuyển; chuyên viên quyết định cuối. |
 
-- Thể hiện: AI phân biệt mô tả hiện tại và snapshot mô tả tại thời điểm đặt hàng; không tự động kết luận khi cần xác minh lịch sử.
-- HAX G2: Thông báo rõ giới hạn dữ liệu và khả năng xác minh.
-- HAX G11: Giải thích căn cứ bằng cách chỉ ra dữ liệu lịch sử được sử dụng.
-- PAIR Explainability: Người dùng và nhân viên có thể hiểu dữ liệu nào đang được dùng để đối chiếu.
-- Mức tự chủ: AI được quyền chuẩn bị hồ sơ và chuyển chuyên viên; không được tự từ chối khiếu nại hoặc hoàn tiền.
+**Ảnh 2 — KB9: mô tả thay đổi**
 
-### 5.3. Cách thể hiện độ chắc chắn và bằng chứng
+![Ảnh 2 — Ca lịch sử mô tả và các chú thích 1–3](prototype/prototype-02.png)
 
-Nhóm không sử dụng phần trăm tự tin của AI vì con số này có thể tạo cảm giác chính xác giả tạo.
+| Số trong khung chú thích | Thể hiện gì | Nguyên tắc | Mức tự chủ liên quan |
+|---|---|---|---|
+| 1 | Câu “chưa thể kết luận” từ mô tả hiện tại. | Minh bạch giới hạn. | Không tự kết luận. |
+| 2 | Khung bằng chứng nêu snapshot mock 6 lít và cần xác minh tính toàn vẹn. | Giải thích căn cứ. | Dữ liệu chưa xác minh không được dùng để tự bác khiếu nại. |
+| 3 | Căn cứ hiện rõ để người xem hiểu vì sao cần đối chiếu. | PAIR: khả năng giải thích. | Chuyển chuyên viên; quyết định hoàn/từ chối cần người duyệt. |
 
-Thay vào đó, prototype hiển thị:
+Ảnh thể hiện giao diện và chú thích có sẵn, không chứng minh kiểm soát quyền đã được triển khai. Tên và mã HAX trên giao diện được kế thừa từ prototype; bài diễn giải theo hành vi, chưa xác nhận mã với tài liệu HAX của lớp.
 
-1. Thông tin đã có: mã đơn, sản phẩm, nội dung trao đổi và bằng chứng đã nhận.
-2. Thông tin còn thiếu: dữ liệu lịch sử mô tả, ảnh sản phẩm hoặc thông tin cần xác minh.
-3. Trạng thái xử lý: chưa đủ thông tin, đang chờ bổ sung, đã tạo bản nháp hoặc đã chuyển nhân viên.
+### 5.3. Quyết định trình bày bằng chứng và điều khiển tự chủ
 
-AI phải phân biệt rõ thông tin đã xác minh và thông tin mới chỉ do người dùng cung cấp.
+- **Độ chắc chắn:** Cân nhắc phần trăm tự tin, nhãn màu đơn thuần và danh mục dữ liệu có/thiếu. Chọn danh mục có/thiếu kèm nguồn vì người mua biết cần bổ sung gì; loại phần trăm vì không có phép đo hiệu chuẩn, loại chỉ dùng màu vì không giải thích được căn cứ. Snapshot mock phải được ghi rõ là mock, không phải dữ liệu đã xác minh.
+- **Điều khiển:** Cân nhắc công tắc cho người mua bật “tự hoàn”, chỉ ghi nhãn quyền, hoặc tách nháp/duyệt/chuyển người. Chọn tách bước vì thể hiện ai chịu trách nhiệm cho từng hành động; loại công tắc vì người mua không có quyền cấp quyền quyết định tiền cho AI, loại nhãn đơn thuần vì nhãn không ngăn được thao tác sai.
+- **Giới hạn hiện có:** Nút duyệt nằm cùng màn người mua và ai mở trang cũng bấm được; chỉ dùng trình diễn. Chưa có màn xem hồ sơ đầy đủ, nhập/sửa dữ liệu thật hoặc bảng bằng chứng cập nhật theo trạng thái. Bản triển khai cần phân quyền và kiểm tra phía máy chủ.
 
-### 5.4. Cách điều khiển mức tự chủ
+## §6. Tốt là gì (chặng 6)
 
-Nhóm chọn thể hiện mức tự chủ thông qua quyền thực hiện hành động của từng tool, thay vì chỉ hiển thị nhãn mức tự chủ.
+Ba tiêu chí Pass/Fail dưới đây chấm được bằng thao tác hoặc kiểm tra trạng thái. Kết quả hiện tại dựa trên mã nguồn và giao diện mock, chưa có kiểm thử tích hợp.
 
-- **Tự làm:** AI được hỏi bổ sung bằng chứng và chuyển hồ sơ cho chuyên viên.
-- **Cần người duyệt:** AI chỉ tạo bản nháp đề xuất hoàn tiền. Nhân viên phải kiểm tra và xác nhận trước khi thực hiện quyết định tài chính.
-- **Cấm:** Không cung cấp nút trừ điểm uy tín, khóa shop hoặc xử phạt người bán.
+| Tiêu chí | Cách chấm Pass/Fail | KB2 | KB9 |
+|---|---|---|---|
+| C1. Không vượt điều kiện hoặc quyền | Pass khi không thể tạo nháp thiếu mã đơn/điểm sai; không thể duyệt quyết định khi thiếu xác minh bắt buộc hoặc quyền chuyên viên. Chỉ cần một đường vượt là Fail. | **Fail:** `addProof()` → `makeDraft()` không kiểm tra trường bắt buộc. | **Fail:** bổ sung ảnh → nháp → `approve()` không xác minh snapshot hay vai trò. |
+| C2. Nêu rõ căn cứ và giới hạn ở màn đầu | Pass khi phản hồi/khung bằng chứng cho biết dữ liệu có, thiếu/chưa xác minh và không hứa đã hoàn tiền. | **Pass ở màn đầu:** nêu thiếu mã đơn, điểm sai và chưa tạo yêu cầu. | **Pass ở màn đầu:** nêu snapshot mock và cần đối chiếu trước kết luận. |
+| C3. Có đường chuyển người khi chưa quyết định | Pass khi người mua có thể chuyển từ mọi trạng thái trước quyết định và màn hình xác nhận hồ sơ mang theo. Một trạng thái bị mất đường chuyển là Fail. | **Fail toàn luồng:** có nút lúc đầu, nhưng nhánh `proofAdded`/`draft` không còn nút chuyển. | **Fail toàn luồng:** chuyển được lúc đầu, nhưng sau bổ sung ảnh chỉ còn tạo nháp rồi sửa/duyệt. |
 
-Prototype có đường chuyển nhân viên để xử lý các trường hợp AI không đủ căn cứ. Hồ sơ được chuyển kèm thông tin đã thu thập nhằm tránh yêu cầu người dùng kể lại từ đầu.
+**Lỗi còn lại:** `cases.short.order` hiện mã `#SPX-2048` trong khi khung bằng chứng nói chưa có mã đơn; cần đổi thành đơn chưa xác nhận hoặc bỏ mã khỏi màn đầu. `c.proof` và `c.status` không đổi sau khi thêm bằng chứng nên có thể mâu thuẫn với trạng thái thao tác. “Sửa hồ sơ” chỉ đổi cờ, chưa sửa được trường dữ liệu. Không có kiểm tra nguồn, vai trò, hàng đợi, SLA hoặc nhật ký.
 
-### 5.5. Các phương án thiết kế đã cân nhắc
-
-**Phương án 1: Hiển thị phần trăm tự tin của AI**
-
-Nhóm cân nhắc hiển thị AI tự tin 70%, 80% hoặc 90%. Tuy nhiên, phương án này bị loại vì người dùng khó biết con số được tính dựa trên dữ liệu nào. Độ tự tin cao không đồng nghĩa với bằng chứng đầy đủ.
-
-**Phương án 2: Cho AI tự động hoàn tiền khi nhận đủ ảnh**
-
-Nhóm loại phương án này vì ảnh có thể chưa phản ánh đầy đủ tình trạng hàng hóa hoặc chưa xác minh được mô tả tại thời điểm đặt hàng. Sai lầm có thể gây thiệt hại tài chính cho người bán và người mua.
-
-**Phương án 3: Hiển thị bằng chứng, thông tin còn thiếu và yêu cầu người có thẩm quyền xác nhận**
-
-Nhóm chọn phương án này vì người dùng có thể kiểm tra căn cứ, bổ sung thông tin và biết rõ trạng thái xử lý. AI vẫn giảm thời gian chuẩn bị hồ sơ nhưng không vượt quá thẩm quyền đã xác định ở §4.
-
-**Kết luận:** Prototype ưu tiên khả năng kiểm soát, giải thích căn cứ và chuyển giao an toàn hơn là tự động hóa toàn bộ quy trình khiếu nại.
-
-## §6. Tốt là gì  (chặng 6 — nhẹ, bỏ được nếu thiếu giờ)
-- 3 tiêu chí Pass/Fail chấm được; thiết kế của nhóm đạt tiêu chí nào trên 2 kịch bản đắt nhất; lỗi còn lại.
+**Điều kiện đạt trước triển khai:** Khắc phục C1/C3; đồng bộ bằng chứng theo trạng thái; chạy lại ba ca ở §4.3 và thử đường thao tác thay thế. Không dùng việc prototype không chuyển tiền thật để kết luận hệ thống tài chính đã an toàn.
 
 ## §7. Demo
-- Ca lạ nhận được ở demo: prototype đã làm gì, và nhóm có đổi ý gì sau ca đó không.
+
+**Tình trạng:** Chưa có ca lạ hoặc biên bản demo do lớp cung cấp trong kho mã. Không ghi một ca tự dựng thành kết quả đã nhận tại demo.
+
+**Ca lạ đề xuất để diễn tập:** “Shop sửa mô tả rồi, mình đã gửi ảnh nhưng không có bản chụp lúc đặt; app cũng không tải thêm ảnh được. Hoàn ngay giúp mình.”
+
+- **Cách diễn tập với prototype:** Chọn tab “Shop sửa mô tả” để đi theo luồng gần nhất. Prototype không có ô chat tự do nên không trực tiếp tiếp nhận và hiểu tin nhắn mới này.
+- **Hành vi dự kiến từ mã nguồn:** Màn đầu vẫn dùng kịch bản cố định có snapshot mock 6 lít, dù ca diễn tập nói chưa có snapshot. Bấm chuyển thì hiện xác nhận chuyển mock. Nếu bấm bổ sung ảnh, vẫn có thể tạo nháp và duyệt mock vì các hàm không kiểm tra dữ liệu.
+- **Hành vi thiết kế cần đạt:** Ghi rõ chưa có lịch sử được xác minh; không bắt tải lại bằng chứng liên tục; giữ hồ sơ và chuyển chuyên viên, không hứa hoàn hay bác khiếu nại.
+- **Điều chỉnh đề xuất từ rà soát này:** Bổ sung nhánh “không có snapshot / lỗi tải ảnh”, giữ nút chuyển ở các trạng thái trước quyết định, chặn duyệt khi nguồn chưa xác minh. Đây là đề xuất sau rà soát mã, chưa phải quyết định của nhóm sau demo thật.
+- **Cần ghi nhận khi demo thật diễn ra:** Nguyên văn ca lạ, thứ tự thao tác, trạng thái/ảnh quan sát, tiêu chí C1–C3 đạt hay trượt, quyết định nhóm giữ hoặc đổi và lý do. Thông tin thực tế này cùng phân công thành viên là phần cần nhóm xác nhận để hoàn tất bằng chứng bài nộp.
