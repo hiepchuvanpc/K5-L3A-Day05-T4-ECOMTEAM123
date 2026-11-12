@@ -8,7 +8,6 @@
 | Nguyễn Tiến Khoa | 2A202603460 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §6 (Xác định 3 tiêu chí Pass/Fail & Rà soát bài nộp). |
 | Nguyễn Thanh Liêm | 2A202603358 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §4 (Thiết lập mức tự chủ 5 tools, lập luận Cost-of-Error & Thử nghiệm 3 ca). |
 
-
 ## §1. Lát cắt & phạm vi
 
 ### Lát cắt
