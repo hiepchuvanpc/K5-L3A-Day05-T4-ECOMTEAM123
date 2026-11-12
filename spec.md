@@ -7,7 +7,7 @@
 | Chử Văn Hiệp | 2A202603382 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §5 (Xây dựng Prototype tương tác & Ánh xạ HAX/PAIR). |
 | Nguyễn Tiến Khoa | 2A202603460 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §6 (Xác định 3 tiêu chí Pass/Fail & Rà soát bài nộp). |
 | Nguyễn Thanh Liêm | 2A202603358 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §4 (Thiết lập mức tự chủ 5 tools, lập luận Cost-of-Error & Thử nghiệm 3 ca). |
-**Căn cứ và giới hạn bài nộp:** Tài liệu này hoàn thiện theo `03-spec-template.md`, bản spec ban đầu và [prototype hiện có](prototype/index.html). Kho mã chưa có README, tài liệu track gốc, `02-guide.md`, `04-rubric.md` hoặc biên bản demo. Vì vậy, không tự bổ sung tên thành viên, ý kiến từng người, dữ liệu track hay kết quả demo. Lát cắt và tên tool được kế thừa từ bản spec ban đầu; cần đối chiếu lại track khi có tài liệu. Các quy tắc vận hành bên dưới là **thiết kế đề xuất của nhóm**, không phải chính sách hoặc SLA đã xác nhận của Shopee. Kết quả kiểm tra prototype được tách rõ khỏi hành vi mong muốn.
+
 
 ## §1. Lát cắt & phạm vi
 
