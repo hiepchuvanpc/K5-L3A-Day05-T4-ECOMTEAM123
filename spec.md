@@ -4,8 +4,8 @@
 
 | Họ và Tên | Mã Học Viên | Việc đã làm |
 |---|---|---|
-|  |  |  |
-|  |  |  |
+| Nguyễn Tiến Khoa| 2A202603460 |  |
+| |  |  |
 |  |  |  |
 
 ## §1. Lát cắt & phạm vi
