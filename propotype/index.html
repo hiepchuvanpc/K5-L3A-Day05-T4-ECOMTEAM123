@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAB5 T4 - Shopee AI hỗ trợ khiếu nại</title>
+
+<style>
+:root {
+  --green: #16734b;
+  --light: #f4f6f3;
+  --border: #dedfd9;
+  --text: #202522;
+  --muted: #68716c;
+  --yellow: #fff4d9;
+  --red: #fae9e6;
+  --blue: #eaf2f9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--light);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+header {
+  background: white;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.panel h2 {
+  font-size: 16px;
+  margin-top: 0;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+button {
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button.active {
+  background: #202522;
+  color: white;
+}
+
+button.primary {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+
+button:hover {
+  opacity: .85;
+}
+
+.order {
+  background: #f1f3ef;
+  padding: 12px;
+  border-radius: 9px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.chat {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  max-width: 95%;
+  white-space: pre-line;
+}
+
+.user {
+  background: #285b87;
+  color: white;
+  align-self: flex-end;
+}
+
+.bot {
+  background: #f0f1ed;
+  align-self: flex-start;
+}
+
+.who {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.status {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.warning {
+  background: var(--yellow);
+  border: 1px solid #ecd69b;
+}
+
+.success {
+  background: #e8f4ed;
+  border: 1px solid #b9ddc8;
+}
+
+.info {
+  background: var(--blue);
+  border: 1px solid #c6d9e9;
+}
+
+.evidence {
+  background: white;
+  border-left: 3px solid #9aa69d;
+  padding: 9px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.promise {
+  border-left: 4px solid var(--green);
+  background: #f5f8f5;
+  padding: 12px;
+  font-size: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+td, th {
+  text-align: left;
+  padding: 9px 5px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.auto {
+  background: #e8f4ed;
+  color: #16734b;
+}
+
+.approval {
+  background: #fff4d9;
+  color: #94620a;
+}
+
+.forbidden {
+  background: #fae9e6;
+  color: #a6382d;
+}
+
+.annotation {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+
+.number {
+  min-width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #bd4b25;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media(max-width: 800px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>LAB5 · T4 — Shopee AI hỗ trợ khiếu nại</h1>
+
+  <div class="subtitle">
+    Trường hợp: Người mua báo sản phẩm nhận được không đúng mô tả.
+    Prototype mô phỏng, không kết nối Shopee thật.
+  </div>
+
+  <div class="tabs">
+    <button class="active" onclick="changeCase('short', this)">
+      ① Ca thiếu thông tin
+    </button>
+
+    <button onclick="changeCase('history', this)">
+      ② Shop sửa mô tả
+    </button>
+
+    <button onclick="changeCase('normal', this)">
+      ③ Ca thông thường
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- KHU VỰC CHAT -->
+  <section class="panel">
+
+    <h2>Trò chuyện với Shopee</h2>
+
+    <div class="order" id="order"></div>
+
+    <div class="chat" id="chat"></div>
+
+  </section>
+
+  <!-- KHU VỰC GIẢI THÍCH -->
+  <section>
+
+    <div class="panel">
+      <h2>Lời hứa của AI</h2>
+      <div class="promise" id="promise"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Mức tự chủ của các tool</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Mức</th>
+            <th>Giới hạn</th>
+          </tr>
+        </thead>
+
+        <tbody id="tools"></tbody>
+      </table>
+
+      <p style="font-size:12px;color:#68716c">
+        AI không tự quyết định hoàn tiền hoặc xử phạt shop.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Bằng chứng và độ chắc chắn</h2>
+      <div class="evidence" id="proof"></div>
+
+      <p style="font-size:12px;color:#68716c">
+        Không hiển thị phần trăm tự tin giả.
+        Hệ thống chỉ thể hiện dữ liệu đã có và còn thiếu.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Chú thích HAX / PAIR</h2>
+      <div id="annotations"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  LAB5 · Nhóm ECOM123 · Track T4
+  <br>
+  Prototype HTML/CSS/JavaScript · Dữ liệu mô phỏng
+</footer>
+
+<script>
+
+const cases = {
+
+  short: {
+    order: "Đơn #SPX-2048 · Trạng thái: Đã giao · Sản phẩm: Chưa xác định",
+
+    user: "Hàng sai rồi, xử lý đi.",
+
+    reply: "Mình có thể hỗ trợ bạn kiểm tra. Bạn đang nói đến đơn hàng nào và sản phẩm nhận được không đúng ở điểm nào so với mô tả lúc đặt hàng?",
+
+    status: "Chưa tạo yêu cầu hoàn tiền. Hiện thiếu mã đơn và nội dung sai lệch nên AI chỉ hỏi lại, chưa gọi tool đề xuất hoàn tiền.",
+
+    proof: "Đã có: nội dung chat “hàng sai”.<br>Chưa có: mã đơn, mô tả lúc đặt, loại sai lệch, ảnh/video bằng chứng.",
+
+    promise: "AI giúp xác định đúng đơn và thu thập thông tin trước. AI không tự kết luận hoặc hoàn tiền.",
+
+    annotations: [
+      ["1", "HAX G10 · Thu hẹp hành động khi không chắc",
+       "AI hỏi lại thông tin còn thiếu và không gọi tool tài chính."],
+
+      ["2", "HAX G2 · Làm rõ khả năng",
+       "Thông báo chưa đủ dữ liệu và chưa tạo yêu cầu hoàn tiền."],
+
+      ["3", "PAIR · Feedback & Control",
+       "Người mua chủ động cung cấp thông tin trước khi hồ sơ được tạo."]
+    ],
+
+    tools: [
+      ["yeu_cau_bang_chung", "Tự làm", "Chỉ gửi câu hỏi thu thập thông tin."],
+      ["chuyen_truong_nhom", "Tự làm", "Chuyển người khi bế tắc hoặc có rủi ro."],
+      ["soan_de_xuat_hoan_tien", "Cần duyệt", "Chỉ tạo bản nháp khi đủ dữ liệu."],
+      ["tu_choi_khieu_nai", "Cần duyệt", "AI không tự đóng khiếu nại."],
+      ["phat_shop", "Cấm", "Không có quyền xử phạt shop."]
+    ]
+  },
+
+  history: {
+    order: "Đơn #SPX-7712 · Đã giao · Nồi chiên không dầu",
+
+    user: "Mình đặt hàng lúc mô tả ghi dung tích 6 lít. Shop sửa mô tả sau khi bán, giờ trang chỉ còn 5 lít.",
+
+    reply: "Mình chưa thể kết luận dựa trên mô tả đang hiển thị. Việc xác minh cần dùng phiên bản mô tả tại thời điểm bạn đặt hàng. Hệ thống mô phỏng hiện có bản ghi lịch sử, nhưng cần nhân viên đối chiếu trước khi kết luận.",
+
+    status: "Đã phát hiện dữ liệu lịch sử cần đối chiếu. AI không được dùng mô tả hiện tại để bác khiếu nại và không được tự hoàn tiền hoặc từ chối.",
+
+    proof: "Có: đơn hàng và thời điểm đặt.<br>Có (mô phỏng): snapshot mô tả lúc đặt ghi “6 lít”.<br>Cần nhân viên xác minh tính toàn vẹn snapshot và đối chiếu bằng chứng sản phẩm.",
+
+    promise: "AI minh bạch dữ liệu đang có, chuẩn bị hồ sơ và chuyển chuyên viên khi cần xác minh. Phán quyết cuối cùng thuộc người có thẩm quyền.",
+
+    annotations: [
+      ["1", "HAX G2 · Minh bạch khả năng",
+       "Thông báo rõ mô tả hiện tại chưa đủ để kết luận."],
+
+      ["2", "HAX G11 · Giải thích căn cứ",
+       "Khung bằng chứng chỉ ra snapshot theo thời điểm đặt hàng."],
+
+      ["3", "PAIR · Explainability",
+       "Nhân viên và người mua nhìn thấy dữ liệu nào được dùng để đối chiếu."]
+    ],
+
+    tools: [
+      ["yeu_cau_bang_chung", "Tự làm", "Xin bằng chứng còn thiếu."],
+      ["chuyen_truong_nhom", "Tự làm", "Chuyển khi lịch sử không xác minh được."],
+      ["soan_de_xuat_hoan_tien", "Cần duyệt", "Chỉ tạo bản nháp."],
+      ["tu_choi_khieu_nai", "Cần duyệt", "Không tự đóng khiếu nại."],
+      ["phat_shop", "Cấm", "Không có quyền xử phạt shop."]
+    ]
+  },
+
+  normal: {
+    order: "Đơn #SPX-3150 · Áo thun size L · Đã giao",
+
+    user: "Mình đặt áo size L nhưng nhận size M. Shop nhắn xác nhận gửi nhầm rồi. Mình muốn trả hàng hoàn tiền.",
+
+    reply: "Mình đã ghi nhận: bạn đặt size L, nhận size M và shop nhắn xác nhận gửi nhầm. Bạn vui lòng xác nhận ảnh tem size M và ảnh đoạn chat với shop để mình đưa vào hồ sơ. Sau đó AI sẽ chuẩn bị bản nháp đề xuất; chuyên viên có thẩm quyền mới duyệt hoàn tiền.",
+
+    status: "Có thể thu thập bằng chứng và soạn bản nháp. Chưa có quyết định hoàn tiền; người mua cần kiểm tra nội dung hồ sơ trước khi gửi.",
+
+    proof: "Có: mã đơn, size đặt L, size nhận M, tin nhắn shop nhận gửi nhầm (mô phỏng).<br>Cần bổ sung: ảnh tem size và ảnh đoạn chat gốc.",
+
+    promise: "AI thu thập chứng cứ và chuẩn bị hồ sơ nhanh; người có thẩm quyền quyết định hoàn tiền.",
+
+    annotations: [
+      ["1", "PAIR · Feedback & Control",
+       "Người mua xác nhận bằng chứng trước khi đưa vào hồ sơ."],
+
+      ["2", "HAX G11 · Giải thích căn cứ",
+       "Tóm tắt size L, size M và tin nhắn shop xác nhận."],
+
+      ["3", "HAX G9 · Sửa dễ",
+       "Có thể bổ sung hoặc sửa bằng chứng trước khi gửi."]
+    ],
+
+    tools: [
+      ["yeu_cau_bang_chung", "Tự làm", "Mở bước bổ sung ảnh."],
+      ["chuyen_truong_nhom", "Tự làm", "Chuyển người khi có tranh chấp."],
+      ["soan_de_xuat_hoan_tien", "Cần duyệt", "Tạo bản nháp, nhân viên duyệt."],
+      ["tu_choi_khieu_nai", "Cần duyệt", "Không tự đóng khiếu nại."],
+      ["phat_shop", "Cấm", "Không có quyền xử phạt shop."]
+    ]
+  }
+
+};
+
+let current = "short";
+let proofAdded = false;
+let draft = false;
+let approved = false;
+let staff = false;
+
+function render() {
+
+  const c = cases[current];
+
+  document.getElementById("order").textContent = c.order;
+
+  let actions = "";
+
+  if (staff) {
+
+    actions = `
+      <div class="status info">
+        <b>Đã chuyển chuyên viên hỗ trợ.</b><br>
+        Hồ sơ gửi kèm nội dung chat, dữ liệu đơn hàng,
+        bằng chứng đã nhận và phần còn thiếu.
+      </div>
+    `;
+
+  } else if (approved) {
+
+    actions = `
+      <div class="status success">
+        <b>Bản nháp đã được nhân viên duyệt (mô phỏng).</b><br>
+        Đây không phải giao dịch thật.
+        Prototype không kết nối ví hoặc hệ thống Shopee.
+      </div>
+    `;
+
+  } else if (draft) {
+
+    actions = `
+      <div class="status warning">
+        <b>Đã tạo bản nháp đề xuất hoàn tiền.</b><br>
+        AI không gửi tiền.
+        Nhân viên cần xem bằng chứng trước khi quyết định.
+      </div>
+
+      <div class="actions">
+        <button class="primary" onclick="approve()">
+          Nhân viên duyệt (mô phỏng)
+        </button>
+
+        <button onclick="editDraft()">Sửa hồ sơ</button>
+      </div>
+    `;
+
+  } else if (proofAdded) {
+
+    actions = `
+      <div class="status success">
+        <b>Đã ghi nhận bằng chứng (mô phỏng).</b><br>
+        Người mua có thể kiểm tra trước khi tạo bản nháp.
+      </div>
+
+      <div class="actions">
+        <button class="primary" onclick="makeDraft()">
+          Tạo bản nháp đề xuất
+        </button>
+      </div>
+    `;
+
+  } else if (current === "short") {
+
+    actions = `
+      <div class="actions">
+        <button class="primary" onclick="addProof()">
+          Bổ sung thông tin đơn hàng
+        </button>
+
+        <button onclick="handoff()">Chuyển nhân viên</button>
+      </div>
+    `;
+
+  } else if (current === "history") {
+
+    actions = `
+      <div class="actions">
+        <button class="primary" onclick="handoff()">
+          Chuyển chuyên viên đối chiếu lịch sử
+        </button>
+
+        <button onclick="addProof()">Bổ sung ảnh sản phẩm</button>
+      </div>
+    `;
+
+  } else {
+
+    actions = `
+      <div class="actions">
+        <button class="primary" onclick="addProof()">
+          Xác nhận đã có ảnh tem và ảnh chat
+        </button>
+
+        <button onclick="handoff()">Chuyển nhân viên</button>
+      </div>
+    `;
+
+  }
+
+  document.getElementById("chat").innerHTML = `
+
+    <div class="message user">
+      ${c.user}
+    </div>
+
+    <div class="message bot">
+
+      <div class="who">Trợ lý Shopee (AI)</div>
+
+      ${c.reply}
+
+      <div class="evidence">
+        ${c.status}
+      </div>
+
+      ${actions}
+
+    </div>
+
+  `;
+
+  document.getElementById("promise").textContent = c.promise;
+
+  document.getElementById("proof").innerHTML = c.proof;
+
+  document.getElementById("tools").innerHTML =
+    c.tools.map(t => {
+
+      let tag = "approval";
+
+      if (t[1] === "Tự làm") tag = "auto";
+      if (t[1] === "Cấm") tag = "forbidden";
+
+      return `
+        <tr>
+          <td><code>${t[0]}</code></td>
+          <td><span class="tag ${tag}">${t[1]}</span></td>
+          <td>${t[2]}</td>
+        </tr>
+      `;
+
+    }).join("");
+
+  document.getElementById("annotations").innerHTML =
+    c.annotations.map(a => `
+      <div class="annotation">
+        <span class="number">${a[0]}</span>
+
+        <div>
+          <b>${a[1]}</b><br>
+          ${a[2]}
+        </div>
+      </div>
+    `).join("");
+
+}
+
+function changeCase(name, button) {
+
+  current = name;
+
+  proofAdded = false;
+  draft = false;
+  approved = false;
+  staff = false;
+
+  document.querySelectorAll(".tabs button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  render();
+}
+
+function addProof() {
+  proofAdded = true;
+  draft = false;
+  approved = false;
+  staff = false;
+  render();
+}
+
+function makeDraft() {
+  draft = true;
+  proofAdded = false;
+  render();
+}
+
+function approve() {
+  approved = true;
+  draft = false;
+  render();
+}
+
+function editDraft() {
+  draft = false;
+  proofAdded = true;
+  render();
+}
+
+function handoff() {
+  staff = true;
+  draft = false;
+  approved = false;
+  render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
