@@ -4,10 +4,10 @@
 
 | Họ và tên | Mã học viên | Việc đã làm |
 |---|---|---|
-| Chử Văn Hiệp | 2A202603382 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
-| Nguyễn Tiến Khoa | 2A202603460 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
-| Nguyễn Thanh Liêm | 2A202603358 | Chưa có thông tin phân công được xác nhận trong tài liệu dự án. |
-**Căn cứ và giới hạn bài nộp:** Tài liệu này hoàn thiện theo `03-spec-template.md`, bản spec ban đầu và [prototype hiện có](propotype/index.html). Kho mã chưa có README, tài liệu track gốc, `02-guide.md`, `04-rubric.md` hoặc biên bản demo. Vì vậy, không tự bổ sung tên thành viên, ý kiến từng người, dữ liệu track hay kết quả demo. Lát cắt và tên tool được kế thừa từ bản spec ban đầu; cần đối chiếu lại track khi có tài liệu. Các quy tắc vận hành bên dưới là **thiết kế đề xuất của nhóm**, không phải chính sách hoặc SLA đã xác nhận của Shopee. Kết quả kiểm tra prototype được tách rõ khỏi hành vi mong muốn.
+| Chử Văn Hiệp | 2A202603382 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §5 (Xây dựng Prototype tương tác & Ánh xạ HAX/PAIR). |
+| Nguyễn Tiến Khoa | 2A202603460 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §6 (Xác định 3 tiêu chí Pass/Fail & Rà soát bài nộp). |
+| Nguyễn Thanh Liêm | 2A202603358 | Cùng nhóm làm §1, §2, §3, §7; Chịu trách nhiệm chính §4 (Thiết lập mức tự chủ 5 tools, lập luận Cost-of-Error & Thử nghiệm 3 ca). |
+**Căn cứ và giới hạn bài nộp:** Tài liệu này hoàn thiện theo `03-spec-template.md`, bản spec ban đầu và [prototype hiện có](prototype/index.html). Kho mã chưa có README, tài liệu track gốc, `02-guide.md`, `04-rubric.md` hoặc biên bản demo. Vì vậy, không tự bổ sung tên thành viên, ý kiến từng người, dữ liệu track hay kết quả demo. Lát cắt và tên tool được kế thừa từ bản spec ban đầu; cần đối chiếu lại track khi có tài liệu. Các quy tắc vận hành bên dưới là **thiết kế đề xuất của nhóm**, không phải chính sách hoặc SLA đã xác nhận của Shopee. Kết quả kiểm tra prototype được tách rõ khỏi hành vi mong muốn.
 
 ## §1. Lát cắt & phạm vi
 
@@ -27,7 +27,7 @@ Trong **Trò chuyện với Shopee**, khi **người mua** đang báo “hàng n
 
 Do thiếu định nghĩa bốn lớp từ track gốc, bài dùng quy ước làm việc: **① sai/lệch ngữ cảnh hoặc nguồn dữ liệu; ② thiếu thông tin/bằng chứng; ③ vượt phạm vi hoặc thẩm quyền; ④ hậu quả nghiêm trọng về tiền/quyền lợi.** Các lớp có thể giao nhau; cần đối chiếu quy ước với tài liệu lớp trước khi nộp.
 
-Bằng chứng dưới đây trỏ tới tool và các khóa dữ liệu/hàm có thật trong `propotype/index.html`; không coi dữ liệu mock là dữ liệu track hay giao dịch thật.
+Bằng chứng dưới đây trỏ tới tool và các khóa dữ liệu/hàm có thật trong `prototype/index.html`; không coi dữ liệu mock là dữ liệu track hay giao dịch thật.
 
 | ID | Tin người dùng | Lớp | AI có thể sai thế nào và căn cứ cụ thể | Sản phẩm tốt nên làm gì | Nhãn |
 |---|---|---|---|---|---|
@@ -140,7 +140,7 @@ Kết quả dưới đây là **đối chiếu luồng mã nguồn**, không ph�
 
 ### 5.1. File, công cụ và phạm vi mô phỏng
 
-- **File:** [propotype/index.html](propotype/index.html) — giữ đúng tên thư mục hiện tại là `propotype`.
+- **File:** [prototype/index.html](prototype/index.html) — thư mục chuẩn `prototype`.
 - **Công cụ:** HTML, CSS, JavaScript thuần; mở file bằng trình duyệt, chọn ba tab tình huống.
 - **Không gọi AI thật:** Hội thoại và dữ liệu nằm cố định trong đối tượng `cases`; không có kết nối Shopee, thanh toán hoặc truy xuất lịch sử thật.
 - **Mock:** Đơn hàng, snapshot, nhận bằng chứng, tạo nháp, duyệt và chuyển nhân viên. Các nút chủ yếu đổi cờ trạng thái rồi gọi `render()`; không thực sự tải ảnh hay gửi hồ sơ ra ngoài.
